@@ -7,25 +7,29 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'fr-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
   title = 'fair-reviews-ui';
   isUserAuthenticated = false;
+  userLogin: string | undefined;
+  userRole: string = 'User'; // Default role
 
   constructor(private userInfoService: UserInfoService, private router: Router) { }
 
   ngOnInit(): void {
     this.userInfoService.getUserInfo().subscribe(
       (userInfo: UserInfo) => {
-        // If successful, redirect to /developers
+        // If successful, store user info and redirect to /developers
         this.isUserAuthenticated = true;
+        this.userLogin = userInfo.login;
+        this.userRole = userInfo.roles.includes('ROLE_ADMIN') ? 'Administrator' : 'User';
         this.router.navigate(['/developers']);
       },
       (error: HttpErrorResponse) => {
         console.log('An error occurred:', error);
         if (error.status === 401) {
-          // If 401, redirect to /login
+          // If 401, redirect to /login-github
           console.log('Redirecting to /login-github');
           this.router.navigate(['/login-github']);
         } else {
@@ -36,4 +40,10 @@ export class AppComponent implements OnInit {
     );
   }
 
+  logout() {
+    this.userInfoService.logout().subscribe(() => {
+      this.isUserAuthenticated = false;
+      this.router.navigate(['/login-github']);
+    });
+  }
 }

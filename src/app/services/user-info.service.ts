@@ -17,4 +17,7 @@ export class UserInfoService {
     return this.httpClient.get<UserInfo>(`${this.gatewayUrl}/rest/user-info`);
   }
 
+  logout(): Observable<void> {
+    return this.httpClient.post<void>(`${this.gatewayUrl}/logout`, {});
+  }
 }
