@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Developer } from '../model/Developer';
 import { DevelopersService } from '../services/developers.service';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'fr-developers',
   templateUrl: './developers.component.html',
-  styleUrl: './developers.component.css'
+  styleUrls: ['./developers.component.css']
 })
 export class DevelopersComponent implements OnInit {
 
@@ -14,19 +15,15 @@ export class DevelopersComponent implements OnInit {
   }
 
   developers: Developer[] = [];
+  developersLoading = true;
 
   constructor(private developersService: DevelopersService) { }
 
   ngOnInit(): void {
-    this.fetchDevelopers();
-  }
-
-  private fetchDevelopers(): void {
-    this.developersService.getDevelopers().subscribe(developersPage => {
+    this.developersService.getDevelopers().pipe(delay(5000)).subscribe(developersPage => {
       console.log(`Fetched developers: ${JSON.stringify(developersPage)}`);
-      setTimeout(() => {
-        this.developers = developersPage.content;
-      });
+      this.developers = developersPage.content;
+      this.developersLoading = false;
     });
   }
 
