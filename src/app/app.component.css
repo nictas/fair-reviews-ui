@@ -1,0 +1,49 @@
+/* Navbar Styling */
+.navbar {
+    background-color: #6c757d; /* Gray background color */
+    color: #343a40; /* Dark text color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #343a40 !important; /* Dark text color for brand */
+  }
+  
+  .nav-link {
+    color: #343a40 !important; /* Dark text color */
+    transition: color 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease;
+    border-radius: 0.25rem; /* Rounded corners for nav links */
+  }
+  
+  .nav-link:hover {
+    color: #ffffff !important; /* White text for hovered links */
+    background-color: #6baed6; /* Lighter blue background for hover */
+    border-radius: 0.25rem; /* Ensures rounded corners on hover */
+  }
+  
+  .nav-link.active {
+    color: #ffffff !important; /* White text for active link */
+    background-color: #3182bd; /* Blue background for active link */
+    border-radius: 0.25rem; /* Ensures rounded corners for active link */
+  }
+  
+  .navbar-toggler {
+    border-color: rgba(52, 58, 64, 0.5); /* Darker border for the toggle button */
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(52, 58, 64, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+  
+  /* Add spacing between nav items */
+  .nav-item + .nav-item {
+    margin-left: 1rem;
+  }
+  
+  /* Container for main content */
+  .container {
+    max-width: 1200px;
+  }
+  
