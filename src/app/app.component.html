@@ -1,4 +1,32 @@
-<h1 *ngIf="isUserAuthenticated">Fair Reviews</h1>
-<div class="container">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="./logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
+      Fair Reviews
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/developers" routerLinkActive="active">Developers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/reviews" routerLinkActive="active">Reviews</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/multipliers" routerLinkActive="active">Multipliers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/statistics" routerLinkActive="active">Statistics</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
   <router-outlet></router-outlet>
 </div>
