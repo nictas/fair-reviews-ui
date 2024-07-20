@@ -14,9 +14,9 @@ export class DevelopersService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getDevelopers(page: number, size: number): Observable<PaginatedResponse<Developer>> {
+  getDevelopers(page: number, size: number, sort: string, direction: string): Observable<PaginatedResponse<Developer>> {
     return this.httpClient.get<PaginatedResponse<Developer>>(
-      `${this.gatewayUrl}/rest/developers?page=${page}&size=${size}`
+      `${this.gatewayUrl}/rest/developers?page=${page}&size=${size}&sort=${sort},${direction}`
     );
   }
 }
