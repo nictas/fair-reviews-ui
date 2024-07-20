@@ -15,8 +15,14 @@ export class DevelopersService {
   constructor(private httpClient: HttpClient) { }
 
   getDevelopers(page: number, size: number, sort: string, direction: string): Observable<PaginatedResponse<Developer>> {
-    return this.httpClient.get<PaginatedResponse<Developer>>(
-      `${this.gatewayUrl}/rest/developers?page=${page}&size=${size}&sort=${sort},${direction}`
-    );
+    let url = `${this.gatewayUrl}/rest/developers?page=${page}&size=${size}&sort=${sort},${direction}`;
+    if (sort !== 'login') {
+      url += '&sort=login,asc';
+    }
+    return this.httpClient.get<PaginatedResponse<Developer>>(url);
+  }
+
+  deleteDeveloper(login: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.gatewayUrl}/rest/developers/${login}`);
   }
 }

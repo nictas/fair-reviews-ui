@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfoService.getUserInfo().subscribe(
-      (userInfo: UserInfo[]) => {
+      (userInfo: UserInfo) => {
         // If successful, redirect to /developers
         this.isUserAuthenticated = true;
         this.router.navigate(['/developers']);

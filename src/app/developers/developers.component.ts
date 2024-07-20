@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { delay, Observable, tap } from 'rxjs';
 import { Developer } from '../model/Developer';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { DevelopersService } from '../services/developers.service';
+import { UserInfoService } from '../services/user-info.service';
 
 @Component({
   selector: 'fr-developers',
@@ -25,16 +26,24 @@ export class DevelopersComponent implements OnInit {
   totalPages = 0;
   sortField = 'score';
   sortDirection = 'asc';
+  isAdmin = false;
+  showConfirmDialog = false;
+  developerToDelete: string | null = null;
 
-  constructor(private developersService: DevelopersService) { }
+  constructor(
+    private developersService: DevelopersService,
+    private userInfoService: UserInfoService
+  ) { }
 
   ngOnInit(): void {
-    this.fetchPage(this.currentPage, this.pageSize).subscribe(page => this.vizualizePage(page));
+    this.userInfoService.getUserInfo().subscribe(userInfo => {
+      this.isAdmin = userInfo.roles.includes('ROLE_ADMIN');
+      this.fetchPage(this.currentPage, this.pageSize).subscribe(page => this.vizualizePage(page));
+    });
   }
 
   private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<Developer>> {
     this.developersLoading = true;
-
     return this.developersService.getDevelopers(page, pageSize, this.sortField, this.sortDirection).pipe(
       // delay(2000), // Uncomment to test the loading indicator
       tap(page => console.log(`Fetched developers page: ${JSON.stringify(page)}`)),
@@ -76,4 +85,23 @@ export class DevelopersComponent implements OnInit {
     return '';
   }
 
+  confirmDelete(login: string): void {
+    this.developerToDelete = login;
+    this.showConfirmDialog = true;
+  }
+
+  cancelDelete(): void {
+    this.showConfirmDialog = false;
+    this.developerToDelete = null;
+  }
+
+  deleteDeveloper(): void {
+    if (this.developerToDelete) {
+      this.developersService.deleteDeveloper(this.developerToDelete).subscribe(() => {
+        this.developers = this.developers.filter(dev => dev.login !== this.developerToDelete);
+        this.showConfirmDialog = false;
+        this.developerToDelete = null;
+      });
+    }
+  }
 }

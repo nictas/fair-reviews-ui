@@ -13,8 +13,8 @@ export class UserInfoService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getUserInfo(): Observable<UserInfo[]> {
-    return this.httpClient.get<UserInfo[]>(`${this.gatewayUrl}/rest/user-info`);
+  getUserInfo(): Observable<UserInfo> {
+    return this.httpClient.get<UserInfo>(`${this.gatewayUrl}/rest/user-info`);
   }
 
 }
