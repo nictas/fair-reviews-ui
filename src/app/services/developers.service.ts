@@ -14,7 +14,9 @@ export class DevelopersService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getDevelopers(): Observable<PaginatedResponse<Developer>> {
-    return this.httpClient.get<PaginatedResponse<Developer>>(`${this.gatewayUrl}/rest/developers`);
+  getDevelopers(page: number, size: number): Observable<PaginatedResponse<Developer>> {
+    return this.httpClient.get<PaginatedResponse<Developer>>(
+      `${this.gatewayUrl}/rest/developers?page=${page}&size=${size}`
+    );
   }
 }

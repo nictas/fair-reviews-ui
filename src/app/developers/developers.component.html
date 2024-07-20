@@ -10,12 +10,7 @@
             </div>
         </div>
         <div class="table-responsive">
-            <div *ngIf="developersLoading" class="text-center">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            <table class="table" *ngIf="!developersLoading && developers.length > 0">
+            <table class="table" *ngIf="!developersLoading || developers.length > 0">
                 <thead>
                     <tr>
                         <th>Login</th>
@@ -33,6 +28,14 @@
             </table>
             <div *ngIf="!developersLoading && developers.length === 0" class="text-center">
                 <p>No developers found.</p>
+            </div>
+            <div *ngIf="developersLoading" class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <div class="text-center" *ngIf="!developersLoading && page < totalPages - 1">
+                <button class="btn btn-primary" (click)="loadMore()">Show More</button>
             </div>
         </div>
     </div>
