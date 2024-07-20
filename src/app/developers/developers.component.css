@@ -13,53 +13,100 @@
 }
 
 .card-header {
-  background: linear-gradient(90deg, #007bff, #0056b3); /* Gradient background */
+  /* Gradient background */
+  background: linear-gradient(90deg, #3182bd, #6baed6);
   color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125); /* Border for separation */
+  /* Subtle shadow */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Border for separation */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .card-header h3 {
-  font-size: 1.5rem; /* Larger font size for the title */
+  /* Larger font size for the title */
+  font-size: 1.5rem;
   font-weight: bold;
-}
-
-.header-actions {
-  /* Add styles for any actions/icons in the header */
 }
 
 .sortable-column {
   cursor: pointer;
   position: relative;
+  /* Space for the arrow */
+  padding-right: 1.5rem;
 }
 
 .sortable-column .arrow-up::before,
 .sortable-column .arrow-down::before {
   font-size: 0.9rem;
-  position: absolute;
-  right: 10px;
   top: 50%;
   transform: translateY(-50%);
 }
 
 /* Additional Styling */
+.table {
+  /* Rounded edges for the table */
+  border-radius: 0.5rem;
+  /* Hide overflow to ensure rounded corners work */
+  overflow: hidden;
+}
+
 .table thead th {
   background-color: #f8f9fa;
   color: #495057;
+  /* Slightly darker bottom border */
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody tr {
+  /* Smooth transition for row hover */
+  transition: background-color 0.3s ease;
 }
 
 .table tbody tr:hover {
-  background-color: #e9ecef; /* Row hover effect */
+  /* Row hover effect */
+  background-color: #e9ecef;
+}
+
+.table tbody td {
+  /* Align text to the middle of cells */
+  vertical-align: middle;
+}
+
+/* Rounded corners for the table header */
+.table thead th:first-child {
+  border-top-left-radius: 0.5rem;
+}
+
+.table thead th:last-child {
+  border-top-right-radius: 0.5rem;
+}
+
+/* Rounded corners for the table footer */
+.table tfoot th:first-child {
+  border-bottom-left-radius: 0.5rem;
+}
+
+.table tfoot th:last-child {
+  border-bottom-right-radius: 0.5rem;
 }
 
 .modal-content {
-  border-radius: 0.5rem; /* Rounded corners for the modal */
+  /* Rounded corners for the modal */
+  border-radius: 0.5rem;
 }
 
 .modal-header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125); /* Border for separation */
+  /* Border for separation */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .modal-footer .btn {
-  min-width: 100px; /* Minimum width for buttons */
+  /* Minimum width for buttons */
+  min-width: 100px;
+}
+
+/* Adjust margin for label and input */
+.form-label {
+  margin-bottom: 0;
+  margin-right: 0.5rem;
 }
