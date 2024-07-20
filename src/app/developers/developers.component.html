@@ -13,9 +13,18 @@
             <table class="table" *ngIf="!developersLoading || developers.length > 0">
                 <thead>
                     <tr>
-                        <th>Login</th>
-                        <th>Email</th>
-                        <th>Score</th>
+                        <th (click)="onSortChange('login')">
+                            Login
+                            <span [ngClass]="getSortArrowClass('login')"></span>
+                        </th>
+                        <th (click)="onSortChange('email')">
+                            Email
+                            <span [ngClass]="getSortArrowClass('email')"></span>
+                        </th>
+                        <th (click)="onSortChange('score')">
+                            Score
+                            <span [ngClass]="getSortArrowClass('score')"></span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,15 +35,15 @@
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf="!developersLoading && developers.length === 0" class="text-center">
-                <p>No developers found.</p>
-            </div>
             <div *ngIf="developersLoading" class="text-center">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div class="text-center" *ngIf="!developersLoading && page < totalPages - 1">
+            <div *ngIf="!developersLoading && developers.length === 0" class="text-center">
+                <p>No developers found.</p>
+            </div>
+            <div class="text-center" *ngIf="!developersLoading && currentPage < totalPages - 1">
                 <button class="btn btn-primary" (click)="loadMore()">Show More</button>
             </div>
         </div>

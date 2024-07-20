@@ -1,0 +1,9 @@
+.arrow-up::before {
+  content: '▲';
+  color: green;
+}
+
+.arrow-down::before {
+  content: '▼';
+  color: red;
+}
