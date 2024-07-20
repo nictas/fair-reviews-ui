@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UserInfoService } from './user-info.service';
-import { IUserInfo } from './IUserInfo';
+import { UserInfoService } from './services/user-info.service';
+import { UserInfo } from './model/UserInfo';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfoService.getUserInfo().subscribe(
-      (userInfo: IUserInfo[]) => {
+      (userInfo: UserInfo[]) => {
         // If successful, redirect to /developers
         this.isUserAuthenticated = true;
         this.router.navigate(['/developers']);

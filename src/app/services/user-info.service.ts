@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IUserInfo } from './IUserInfo';
+import { UserInfo } from '../model/UserInfo';
 import { Observable } from 'rxjs';
-import { environment } from '../environment/environment';
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,8 @@ export class UserInfoService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getUserInfo(): Observable<IUserInfo[]> {
-    return this.httpClient.get<IUserInfo[]>(`${this.gatewayUrl}/rest/user-info`);
+  getUserInfo(): Observable<UserInfo[]> {
+    return this.httpClient.get<UserInfo[]>(`${this.gatewayUrl}/rest/user-info`);
   }
 
 }

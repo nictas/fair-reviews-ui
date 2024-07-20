@@ -1,1 +1,31 @@
-<p>developers works!</p>
+<div class="card">
+    <div class="card-header">
+        {{pageTitle}}
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2">Filter by:</div>
+            <div class="col-md-4">
+                <input type="text"  />
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table" *ngIf="developers.length > 0">
+                <thead>
+                    <tr>
+                        <th>Login</th>
+                        <th>Email</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let developer of developers">
+                        <td><a [routerLink]="['/developers',developer.login]">{{developer.login}}</a></td>
+                        <td>{{developer.email}}</td>
+                        <td>{{developer.score | number:'1.2-2'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
