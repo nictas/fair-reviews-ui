@@ -6,11 +6,16 @@
         <div class="row">
             <div class="col-md-2">Filter by:</div>
             <div class="col-md-4">
-                <input type="text"  />
+                <input type="text" />
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table" *ngIf="developers.length > 0">
+            <div *ngIf="developersLoading" class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <table class="table" *ngIf="!developersLoading && developers.length > 0">
                 <thead>
                     <tr>
                         <th>Login</th>
@@ -20,12 +25,15 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let developer of developers">
-                        <td><a [routerLink]="['/developers',developer.login]">{{developer.login}}</a></td>
+                        <td><a [routerLink]="['/developers', developer.login]">{{developer.login}}</a></td>
                         <td>{{developer.email}}</td>
                         <td>{{developer.score | number:'1.2-2'}}</td>
                     </tr>
                 </tbody>
             </table>
+            <div *ngIf="!developersLoading && developers.length === 0" class="text-center">
+                <p>No developers found.</p>
+            </div>
         </div>
     </div>
 </div>
