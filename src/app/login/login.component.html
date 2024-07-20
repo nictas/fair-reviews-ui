@@ -1,13 +1,9 @@
-<div class="card mx-auto my-5" style="max-width: 400px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-    <div class="card-body">
-        <div class="text-center mb-4">
-            <img src="./logo.png" class="img-fluid" style="max-height: 150px;" />
-        </div>
-        <div class="text-center mb-4">
-            <h3>Welcome to Fair Reviews!</h3>
-        </div>
-        <div class="text-center">
-            <button class="btn btn-primary" (click)="loginWithGitHub()">
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-sm" style="max-width: 400px; border-radius: 0.5rem;">
+        <div class="card-body text-center">
+            <img src="./logo.png" class="img-fluid mb-4" style="max-height: 150px;" alt="Fair Reviews Logo" />
+            <h3 class="mb-4">Welcome to Fair Reviews!</h3>
+            <button class="btn btn-primary btn-lg" (click)="loginWithGitHub()">
                 Log in with GitHub
             </button>
         </div>

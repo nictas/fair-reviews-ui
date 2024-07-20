@@ -1,0 +1,39 @@
+/* Container for centering the card */
+.container {
+    min-height: 100vh; /* Ensure full viewport height */
+  }
+  
+  /* Card styling */
+  .card {
+    border-radius: 0.5rem; /* Rounded corners for the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  /* Card body styling */
+  .card-body {
+    padding: 2rem; /* Adequate padding inside the card */
+  }
+  
+  /* Button styling */
+  .btn-primary {
+    padding: 0.75rem 1.5rem; /* Increased padding for better appearance */
+    font-size: 1rem; /* Consistent font size */
+    border-radius: 0.25rem; /* Rounded corners for button */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3; /* Darker blue for hover effect */
+  }
+  
+  /* Image styling */
+  .img-fluid {
+    max-height: 150px; /* Limit image height */
+  }
+  
+  /* Heading styling */
+  h3 {
+    font-size: 1.75rem; /* Slightly larger font size for heading */
+    color: #343a40; /* Dark color for the heading */
+  }
+  
