@@ -1,4 +1,4 @@
-export interface IUserInfo {
+export interface UserInfo {
     login: string;
     roles: string[];
 }
