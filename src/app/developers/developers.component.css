@@ -7,3 +7,59 @@
   content: '▼';
   color: red;
 }
+
+.btn i.bi-trash {
+  font-size: 1rem;
+}
+
+.card-header {
+  background: linear-gradient(90deg, #007bff, #0056b3); /* Gradient background */
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125); /* Border for separation */
+}
+
+.card-header h3 {
+  font-size: 1.5rem; /* Larger font size for the title */
+  font-weight: bold;
+}
+
+.header-actions {
+  /* Add styles for any actions/icons in the header */
+}
+
+.sortable-column {
+  cursor: pointer;
+  position: relative;
+}
+
+.sortable-column .arrow-up::before,
+.sortable-column .arrow-down::before {
+  font-size: 0.9rem;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Additional Styling */
+.table thead th {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.table tbody tr:hover {
+  background-color: #e9ecef; /* Row hover effect */
+}
+
+.modal-content {
+  border-radius: 0.5rem; /* Rounded corners for the modal */
+}
+
+.modal-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125); /* Border for separation */
+}
+
+.modal-footer .btn {
+  min-width: 100px; /* Minimum width for buttons */
+}

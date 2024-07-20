@@ -1,50 +1,82 @@
-<div class="card">
-    <div class="card-header">
-        {{pageTitle}}
+<div class="card shadow-lg rounded border-light">
+    <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center p-3">
+        <h3 class="mb-0">{{pageTitle}}</h3>
+        <div class="header-actions">
+            <!-- Add any header actions here, if needed -->
+        </div>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-2">Filter by:</div>
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <label for="filterInput" class="form-label">Filter by:</label>
+            </div>
             <div class="col-md-4">
-                <input type="text" />
+                <input id="filterInput" type="text" class="form-control" placeholder="Search..."/>
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table" *ngIf="!developersLoading || developers.length > 0">
-                <thead>
+            <table class="table table-striped table-hover" *ngIf="!developersLoading || developers.length > 0">
+                <thead class="thead-dark">
                     <tr>
-                        <th (click)="onSortChange('login')">
+                        <th (click)="onSortChange('login')" class="sortable-column">
                             Login
                             <span [ngClass]="getSortArrowClass('login')"></span>
                         </th>
-                        <th (click)="onSortChange('email')">
+                        <th (click)="onSortChange('email')" class="sortable-column">
                             Email
                             <span [ngClass]="getSortArrowClass('email')"></span>
                         </th>
-                        <th (click)="onSortChange('score')">
+                        <th (click)="onSortChange('score')" class="sortable-column">
                             Score
                             <span [ngClass]="getSortArrowClass('score')"></span>
                         </th>
+                        <th *ngIf="isAdmin">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let developer of developers">
-                        <td><a [routerLink]="['/developers', developer.login]">{{developer.login}}</a></td>
+                        <td><a [routerLink]="['/developers', developer.login]" class="text-primary">{{developer.login}}</a></td>
                         <td>{{developer.email}}</td>
                         <td>{{developer.score | number:'1.2-2'}}</td>
+                        <td *ngIf="isAdmin">
+                            <button class="btn btn-danger btn-sm" (click)="confirmDelete(developer.login)" aria-label="Delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf="developersLoading" class="text-center">
-                <div class="spinner-border" role="status">
+            <div *ngIf="developersLoading" class="text-center mt-4">
+                <div class="spinner-border text-primary" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div *ngIf="!developersLoading && developers.length === 0" class="text-center">
-                <p>No developers found.</p>
+            <div *ngIf="!developersLoading && developers.length === 0" class="text-center mt-4">
+                <p class="text-muted">No developers found.</p>
             </div>
-            <div class="text-center" *ngIf="!developersLoading && currentPage < totalPages - 1">
-                <button class="btn btn-primary" (click)="loadMore()">Show More</button>
+            <div class="text-center mt-4" *ngIf="!developersLoading && currentPage < totalPages - 1">
+                <button class="btn btn-primary btn-lg" (click)="loadMore()">Show More</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div *ngIf="showConfirmDialog" class="modal fade show d-block" tabindex="-1" role="dialog" style="display: block;">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content rounded-lg border-0">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirm Deletion</h5>
+                    <button type="button" class="close" aria-label="Close" (click)="cancelDelete()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this developer? This will also delete any reviews done by this developer in the past.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="deleteDeveloper()">Confirm</button>
+                    <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
