@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { delay, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Developer } from '../model/Developer';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { DevelopersService } from '../services/developers.service';
