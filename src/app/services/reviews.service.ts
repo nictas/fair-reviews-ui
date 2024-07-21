@@ -22,4 +22,9 @@ export class ReviewsService {
   deleteReview(id: string): Observable<void> {
     return this.httpClient.delete<void>(`${this.gatewayUrl}/rest/reviews/${id}`);
   }
+
+  getReview(id: string): Observable<PullRequestReview> {
+    return this.httpClient.get<PullRequestReview>(`${this.gatewayUrl}/rest/reviews/${id}`);
+  }
+
 }
