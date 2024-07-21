@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { DevelopersComponent } from './developers/developers.component';
 import { LoginComponent } from './login/login.component';
-import { ReviewComponent } from './reviews/review.component';
+import { ReviewsComponent } from './reviews/reviews.component';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
     AppComponent,
     DevelopersComponent,
     LoginComponent,
-    ReviewComponent
+    ReviewsComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +22,7 @@ import { FormsModule } from '@angular/forms';
     RouterModule.forRoot([
       { path: 'login-github', component: LoginComponent },
       { path: 'developers', component: DevelopersComponent },
-      { path: 'reviews', component: ReviewComponent }
+      { path: 'reviews', component: ReviewsComponent }
     ])
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
