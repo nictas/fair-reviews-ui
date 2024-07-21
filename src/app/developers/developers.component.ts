@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { delay, Observable, tap } from 'rxjs';
 import { Developer } from '../model/Developer';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { DevelopersService } from '../services/developers.service';
@@ -16,7 +16,7 @@ export class DevelopersComponent implements OnInit {
   }
 
   get pageSize() {
-    return 20;
+    return 5;
   }
 
   developers: Developer[] = [];
@@ -44,7 +44,7 @@ export class DevelopersComponent implements OnInit {
   private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<Developer>> {
     this.developersLoading = true;
     return this.developersService.getDevelopers(page, pageSize, this.sortField, this.sortDirection).pipe(
-      // delay(2000), // Uncomment to test the loading indicator
+      delay(2000), // Uncomment to test the loading indicator
       tap(page => console.log(`Fetched developers page: ${JSON.stringify(page)}`)),
       tap(page => this.developersLoading = false)
     );
