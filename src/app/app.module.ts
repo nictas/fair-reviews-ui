@@ -9,6 +9,7 @@ import { DevelopersComponent } from './developers/developers.component';
 import { LoginComponent } from './login/login.component';
 import { MultipliersComponent } from './multipliers/multipliers.component';
 import { ReviewsComponent } from './reviews/reviews.component';
+import { MultiplierDetailComponent } from './multipliers/multiplier-detail.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ReviewsComponent } from './reviews/reviews.component';
     DevelopersComponent,
     LoginComponent,
     ReviewsComponent,
-    MultipliersComponent
+    MultipliersComponent,
+    MultiplierDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +27,8 @@ import { ReviewsComponent } from './reviews/reviews.component';
       { path: 'login-github', component: LoginComponent },
       { path: 'developers', component: DevelopersComponent },
       { path: 'reviews', component: ReviewsComponent },
-      { path: 'multipliers', component: MultipliersComponent }
+      { path: 'multipliers', component: MultipliersComponent },
+      { path: 'multipliers/:id', component: MultiplierDetailComponent }
     ])
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
