@@ -22,4 +22,9 @@ export class MultipliersService {
   deleteMultiplier(id: string): Observable<void> {
     return this.httpClient.delete<void>(`${this.gatewayUrl}/rest/multipliers/${id}`);
   }
+
+  getMultiplier(id: string): Observable<Multiplier> {
+    return this.httpClient.get<Multiplier>(`${this.gatewayUrl}/rest/multipliers/${id}`);
+  }
+
 }

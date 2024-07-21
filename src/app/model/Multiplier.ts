@@ -1,4 +1,4 @@
-interface FileMultiplier {
+export interface FileMultiplier {
     id: string;
     fileExtension: string;
     additionsMultiplier: number;
