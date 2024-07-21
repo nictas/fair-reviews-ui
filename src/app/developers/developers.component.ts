@@ -6,7 +6,6 @@ import { DevelopersService } from '../services/developers.service';
 import { UserInfoService } from '../services/user-info.service';
 
 @Component({
-  selector: 'fr-developers',
   templateUrl: './developers.component.html',
   styleUrls: ['./developers.component.css']
 })
