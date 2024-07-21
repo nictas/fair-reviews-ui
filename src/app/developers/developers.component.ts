@@ -120,7 +120,7 @@ export class DevelopersComponent implements OnInit {
   deleteDeveloper(): void {
     if (this.developerToDelete) {
       this.developersService.deleteDeveloper(this.developerToDelete).subscribe(() => {
-        this.developers = this.developers.filter(dev => dev.login !== this.developerToDelete);
+        this.developers = this.developers.filter(developer => developer.login !== this.developerToDelete);
         this.showConfirmDialog = false;
         this.developerToDelete = null;
       });
