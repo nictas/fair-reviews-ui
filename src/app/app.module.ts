@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { DevelopersComponent } from './developers/developers.component';
 import { LoginComponent } from './login/login.component';
 import { ReviewComponent } from './reviews/review.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ReviewComponent } from './reviews/review.component';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     RouterModule.forRoot([
       { path: 'login-github', component: LoginComponent },
       { path: 'developers', component: DevelopersComponent },
