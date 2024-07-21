@@ -19,8 +19,31 @@ export class DevelopersComponent implements OnInit {
     return 5;
   }
 
-  developers: Developer[] = [];
+  private _developersFilter = '';
+
+  get developersFilter(): string {
+    return this._developersFilter;
+  }
+
+  set developersFilter(filter: string) {
+    this._developersFilter = filter;
+    this.updateShownDevelopers();
+  }
+
+  private _developers: Developer[] = [];
+
+  get developers(): Developer[] {
+    return this._developers;
+  }
+
+  set developers(developers: Developer[]) {
+    this._developers = developers;
+    this.updateShownDevelopers();
+  }
+
+  shownDevelopers: Developer[] = [];
   developersLoading = true;
+
   currentPage = 0;
   totalPages = 0;
   sortField = 'score';
@@ -103,4 +126,15 @@ export class DevelopersComponent implements OnInit {
       });
     }
   }
+
+  updateShownDevelopers(): void {
+    let filter = this.developersFilter.toLowerCase();
+    this.shownDevelopers = this.developers.filter(developer => {
+      let login = developer.login.toLowerCase();
+      let email = developer.email.toLowerCase();
+      return login.includes(filter) || email.includes(filter);
+    });
+  }
 }
+
+
