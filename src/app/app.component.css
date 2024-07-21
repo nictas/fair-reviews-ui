@@ -67,6 +67,17 @@
   cursor: pointer;
 }
 
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: #6baed6;
+  color: white;
+}
+
+.dropdown-item:active {
+  background-color: #3182bd;
+  color: white;
+}
+
 .nav-item {
   /* Spacing between nav items */
   margin-left: 1rem !important;
