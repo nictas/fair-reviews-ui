@@ -1,0 +1,29 @@
+@import "../shared/shared.css";
+
+/* Container for the ratio bar */
+.ratio-bar {
+    position: relative;
+    height: 1rem; /* Adjust height as needed */
+    background-color: #e9ecef; /* Background color for the bar */
+    border-radius: 0.25rem; /* Rounded corners */
+    overflow: hidden;
+  }
+  
+  /* Segment for additions */
+  .ratio-bar-additions {
+    height: 100%;
+    background-color: #28a745; /* Green color for additions */
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  /* Segment for deletions */
+  .ratio-bar-deletions {
+    height: 100%;
+    background-color: #dc3545; /* Red color for deletions */
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  

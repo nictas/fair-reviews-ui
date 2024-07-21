@@ -23,9 +23,8 @@ export class MultiplierDetailComponent implements OnInit {
 
   set filter(filter: string) {
     this._filter = filter;
-    this.updateShownFileMultipliers();
+    this.updateShown();
   }
-
 
   constructor(
     private multipliersService: MultipliersService,
@@ -37,7 +36,7 @@ export class MultiplierDetailComponent implements OnInit {
     const multiplierId = this.route.snapshot.paramMap.get('id');
     if (multiplierId) {
       this.dataLoading = true;
-      this.fetchMultiplier(multiplierId).pipe(
+      this.multipliersService.getMultiplier(multiplierId).pipe(
         delay(2000), // Uncomment to test the loading indicator
         tap(data => console.log(`Fetched data: ${JSON.stringify(data)}`)),
         tap(data => {
@@ -46,16 +45,12 @@ export class MultiplierDetailComponent implements OnInit {
       ).subscribe(multiplier => {
         this.multiplier = multiplier;
         this.fileMultipliers = multiplier.fileMultipliers;
-        this.updateShownFileMultipliers();
+        this.updateShown();
       });
     }
   }
 
-  private fetchMultiplier(id: string): Observable<Multiplier> {
-    return this.multipliersService.getMultiplier(id);
-  }
-
-  updateShownFileMultipliers(): void {
+  updateShown(): void {
     let filter = this.filter.toLowerCase();
     this.shownFileMultipliers = this.fileMultipliers.filter(fileMultiplier => {
       let id = fileMultiplier.id.toLowerCase();

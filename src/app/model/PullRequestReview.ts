@@ -1,13 +1,13 @@
 import { Developer } from "./Developer";
 import { Multiplier } from "./Multiplier";
 
-interface ChangedFile {
+export interface ChangedFile {
     name: string;
     additions: number;
     deletions: number;
 }
 
-interface PullRequestFileDetails {
+export interface PullRequestFileDetails {
     changedFiles: ChangedFile[];
 }
 
