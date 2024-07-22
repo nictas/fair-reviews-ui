@@ -33,6 +33,8 @@ export class DeveloperDetailComponent implements OnInit {
   shownReviews: PullRequestReview[] = [];
   dataLoading = true;
   isCollapsed = false;
+  sortField = 'createdAt';
+  sortDirection = 'desc';
 
   private _filter = '';
   get filter(): string {
@@ -51,7 +53,7 @@ export class DeveloperDetailComponent implements OnInit {
   currentPage = 0;
   totalPages = 0;
   reviewToDelete: string | null = null;
-  showConfirmDialog= false;
+  showConfirmDialog = false;
 
 
   constructor(
@@ -95,7 +97,7 @@ export class DeveloperDetailComponent implements OnInit {
 
   fetchPage(login: string, page: number, pageSize: number): Observable<PaginatedResponse<PullRequestReview>> {
     this.dataLoading = true;
-    return this.developersService.getDeveloperHistory(login, page, pageSize).pipe(
+    return this.developersService.getDeveloperHistory(login, page, pageSize, this.sortField, this.sortDirection).pipe(
       delay(2000), // Uncomment to test the loading indicator
       tap(data => console.log(`Fetched data: ${JSON.stringify(data)}`)),
       tap(data => {
@@ -140,6 +142,28 @@ export class DeveloperDetailComponent implements OnInit {
         this.reviewToDelete = null;
       });
     }
+  }
+
+  onSortChange(field: string): void {
+    if (this.dataLoading) {
+      return;
+    }
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';  // Reset to ascending if a new field is clicked
+    }
+    this.fetchPage(this.login, 0, (this.currentPage + 1) * this.pageSize).subscribe(page => {
+      this.reviews = page.content;
+    });
+  }
+
+  getSortArrowClass(field: string): string {
+    if (this.sortField === field) {
+      return this.sortDirection === 'asc' ? 'arrow-up' : 'arrow-down';
+    }
+    return '';
   }
 
 }
