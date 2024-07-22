@@ -25,3 +25,16 @@
     border-left-color: #6baed6;
     border-bottom-color: white;
 }
+
+.btn-secondary {
+    background-color: #f57c00;
+    border-color: #f57c00;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+    background-color: #e64a19;
+    /* Darker shade for hover, focus, and active states */
+    border-color: #e64a19;
+}
