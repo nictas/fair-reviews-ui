@@ -1,5 +1,6 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { delay, tap } from 'rxjs';
 import { ChangedFile, PullRequestReview } from '../model/PullRequestReview';
 import { ReviewsService } from '../services/reviews.service';
@@ -29,7 +30,7 @@ export class ReviewDetailComponent implements OnInit {
   constructor(
     private reviewsService: ReviewsService,
     private route: ActivatedRoute,
-    private router: Router
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -59,7 +60,7 @@ export class ReviewDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/reviews']);
+    this.location.back();
   }
 
   toggleCollapse() {

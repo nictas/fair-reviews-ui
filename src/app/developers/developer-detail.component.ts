@@ -1,5 +1,6 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { delay, tap } from 'rxjs';
 import { Developer } from '../model/Developer';
 import { PullRequestReview } from '../model/PullRequestReview';
@@ -30,7 +31,7 @@ export class DeveloperDetailComponent implements OnInit {
   constructor(
     private developersService: DevelopersService,
     private route: ActivatedRoute,
-    private router: Router
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -67,7 +68,7 @@ export class DeveloperDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/developers']);
+    this.location.back();
   }
 
   toggleCollapse() {

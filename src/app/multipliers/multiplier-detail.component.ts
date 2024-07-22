@@ -1,6 +1,7 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { delay, Observable, tap } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { delay, tap } from 'rxjs';
 import { FileMultiplier, Multiplier } from '../model/Multiplier';
 import { MultipliersService } from '../services/multipliers.service';
 
@@ -29,7 +30,7 @@ export class MultiplierDetailComponent implements OnInit {
   constructor(
     private multipliersService: MultipliersService,
     private route: ActivatedRoute,
-    private router: Router
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -60,7 +61,7 @@ export class MultiplierDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/multipliers']);
+    this.location.back();
   }
 
   toggleCollapse() {
