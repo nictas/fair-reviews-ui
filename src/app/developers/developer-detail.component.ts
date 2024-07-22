@@ -6,6 +6,8 @@ import { Developer } from '../model/Developer';
 import { PullRequestReview } from '../model/PullRequestReview';
 import { DevelopersService } from '../services/developers.service';
 import { PaginatedResponse } from '../model/PaginatedResponse';
+import { UserInfoService } from '../services/user-info.service';
+import { ReviewsService } from '../services/reviews.service';
 
 @Component({
   templateUrl: './developer-detail.component.html',
@@ -13,6 +15,7 @@ import { PaginatedResponse } from '../model/PaginatedResponse';
 })
 export class DeveloperDetailComponent implements OnInit {
 
+  isAdmin = false;
   login = '';
   developer: Developer | null = null;
 
@@ -47,27 +50,35 @@ export class DeveloperDetailComponent implements OnInit {
 
   currentPage = 0;
   totalPages = 0;
+  reviewToDelete: string | null = null;
+  showConfirmDialog= false;
+
 
   constructor(
+    private userInfoService: UserInfoService,
     private developersService: DevelopersService,
+    private reviewsService: ReviewsService,
     private route: ActivatedRoute,
     private location: Location
   ) { }
 
   ngOnInit(): void {
-    const loginParameter = this.route.snapshot.paramMap.get('login');
-    if (loginParameter != null) {
-      this.login = loginParameter;
-    }
-    if (this.login) {
-      this.dataLoading = true;
-      this.developersService.getDeveloper(this.login).pipe(
-        tap(data => console.log(`Fetched data: ${JSON.stringify(data)}`))
-      ).subscribe(developer => {
-        this.developer = developer;
-        this.fetchPage(this.login, this.currentPage, this.pageSize).subscribe(page => this.vizualizePage(page));
-      })
-    }
+    this.userInfoService.getUserInfo().subscribe(userInfo => {
+      this.isAdmin = userInfo.roles.includes('ROLE_ADMIN');
+      const loginParameter = this.route.snapshot.paramMap.get('login');
+      if (loginParameter != null) {
+        this.login = loginParameter;
+      }
+      if (this.login) {
+        this.dataLoading = true;
+        this.developersService.getDeveloper(this.login).pipe(
+          tap(data => console.log(`Fetched data: ${JSON.stringify(data)}`))
+        ).subscribe(developer => {
+          this.developer = developer;
+          this.fetchPage(this.login, this.currentPage, this.pageSize).subscribe(page => this.vizualizePage(page));
+        })
+      }
+    });
   }
 
   loadMore(): void {
@@ -109,6 +120,26 @@ export class DeveloperDetailComponent implements OnInit {
 
   toggleCollapse() {
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  confirmDelete(id: string): void {
+    this.reviewToDelete = id;
+    this.showConfirmDialog = true;
+  }
+
+  cancelDelete(): void {
+    this.showConfirmDialog = false;
+    this.reviewToDelete = null;
+  }
+
+  deleteMultiplier(): void {
+    if (this.reviewToDelete) {
+      this.reviewsService.deleteReview(this.reviewToDelete).subscribe(() => {
+        this.reviews = this.reviews.filter(review => review.id !== this.reviewToDelete);
+        this.showConfirmDialog = false;
+        this.reviewToDelete = null;
+      });
+    }
   }
 
 }
