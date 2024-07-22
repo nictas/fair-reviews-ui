@@ -34,7 +34,9 @@ import { ReviewsComponent } from './reviews/reviews.component';
       { path: 'reviews', component: ReviewsComponent },
       { path: 'reviews/:id', component: ReviewDetailComponent },
       { path: 'multipliers', component: MultipliersComponent },
-      { path: 'multipliers/:id', component: MultiplierDetailComponent }
+      { path: 'multipliers/:id', component: MultiplierDetailComponent },
+      { path: '', redirectTo: 'developers', pathMatch: 'full' },
+      { path: '**', redirectTo: 'developers', pathMatch: 'full' }
     ])
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
