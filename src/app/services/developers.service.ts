@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Developer } from '../model/Developer';
 import { environment } from '../../environment/environment';
 import { PaginatedResponse } from '../model/PaginatedResponse';
+import { PullRequestReview } from '../model/PullRequestReview';
 
 @Injectable({
   providedIn: 'root'
@@ -25,4 +26,13 @@ export class DevelopersService {
   deleteDeveloper(login: string): Observable<void> {
     return this.httpClient.delete<void>(`${this.gatewayUrl}/rest/developers/${login}`);
   }
+
+  getDeveloper(login: string): Observable<Developer> {
+    return this.httpClient.get<Developer>(`${this.gatewayUrl}/rest/developers/${login}`);
+  }
+
+  getDeveloperHistory(login: string): Observable<PaginatedResponse<PullRequestReview>> {
+    return this.httpClient.get<PaginatedResponse<PullRequestReview>>(`${this.gatewayUrl}/rest/developers/${login}/history?sort=createdAt,desc`);
+  }
+
 }
