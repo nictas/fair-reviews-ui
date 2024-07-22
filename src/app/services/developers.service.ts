@@ -31,8 +31,8 @@ export class DevelopersService {
     return this.httpClient.get<Developer>(`${this.gatewayUrl}/rest/developers/${login}`);
   }
 
-  getDeveloperHistory(login: string): Observable<PaginatedResponse<PullRequestReview>> {
-    return this.httpClient.get<PaginatedResponse<PullRequestReview>>(`${this.gatewayUrl}/rest/developers/${login}/history?sort=createdAt,desc`);
+  getDeveloperHistory(login: string, page: number, size: number): Observable<PaginatedResponse<PullRequestReview>> {
+    return this.httpClient.get<PaginatedResponse<PullRequestReview>>(`${this.gatewayUrl}/rest/developers/${login}/history?page=${page}&size=${size}&sort=createdAt,desc`);
   }
 
 }
