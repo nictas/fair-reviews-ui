@@ -74,6 +74,9 @@
             <div *ngIf="!dataLoading && reviews.length === 0" class="text-center mt-4">
                 <p class="text-muted">No pull request reviews found.</p>
             </div>
+            <div class="text-center mt-4" *ngIf="!dataLoading && currentPage < totalPages - 1">
+                <button class="btn btn-primary btn-lg" (click)="loadMore()">Show More</button>
+            </div>
         </div>
     </div>
 </div>
