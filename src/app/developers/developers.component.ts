@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { delay, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Developer } from '../model/Developer';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { DevelopersService } from '../services/developers.service';
 import { UserInfoService } from '../services/user-info.service';
+import { mergeUnique } from '../shared/merge';
 
 @Component({
   templateUrl: './developers.component.html',
@@ -69,25 +70,16 @@ export class DevelopersComponent implements OnInit {
   private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<Developer>> {
     this.developersLoading = true;
     return this.developersService.getDevelopers(page, pageSize, this.sortField, this.sortDirection).pipe(
-      delay(2000), // Uncomment to test the loading indicator
+      // delay(2000), // Uncomment to test the loading indicator
       tap(page => console.log(`Fetched developers page: ${JSON.stringify(page)}`)),
       tap(page => this.developersLoading = false)
     );
   }
 
   private vizualizePage(page: PaginatedResponse<Developer>): void {
-    this.developers = this.mergeDevelopers(this.developers, page.content);
+    this.developers = mergeUnique(this.developers, page.content, developer => developer.login);
     this.totalPages = page.totalPages;
     this.currentPage = page.number;
-  }
-
-  mergeDevelopers(existingDevelopers: Developer[], newDevelopers: Developer[]): Developer[] {
-    const existingLogins = new Set(existingDevelopers.map(developer => developer.login));
-    const result = [
-      ...existingDevelopers,
-      ...newDevelopers.filter(developer => !existingLogins.has(developer.login))
-    ];
-    return result;
   }
 
   loadMore(): void {
