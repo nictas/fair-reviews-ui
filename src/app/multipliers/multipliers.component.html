@@ -3,6 +3,10 @@
         <h3 class="mb-0">{{pageTitle}}</h3>
     </div>
     <div class="card-body">
+        <div *ngIf="message" class="alert"
+            [ngClass]="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}">
+            {{ message }}
+        </div>
         <div class="row mb-3">
             <div class="col-md-6 d-flex align-items-center">
                 <label for="filterInput" class="form-label mb-0 mr-2">Filter:</label>
@@ -10,7 +14,9 @@
                     [(ngModel)]="multipliersFilter" />
             </div>
             <div class="col-md-6 d-flex justify-content-end">
-                <button class="btn btn-secondary" (click)="openAddMultiplierModal()">Add Multiplier</button>
+                <button class="btn btn-secondary" (click)="openAddMultiplierModal()"
+                    style="margin-right: 1rem;">New</button>
+                <button class="btn btn-secondary" (click)="applyLatestMultiplier()">Apply Latest</button>
             </div>
         </div>
         <div class="table-responsive">

@@ -55,6 +55,8 @@ export class MultipliersComponent implements OnInit {
   showAddMultiplierForm = false;
   multiplierToDelete: string | null = null;
   addMultiplierForm!: FormGroup;
+  message: string | null = null;
+  messageType: string | null = null;
 
   constructor(
     private multipliersService: MultipliersService,
@@ -150,6 +152,21 @@ export class MultipliersComponent implements OnInit {
   closeAddMultiplierModal(): void {
     this.showAddMultiplierForm = false;
     this.refreshOpenPages();
+  }
+
+  applyLatestMultiplier() {
+    this.multipliersService.applyLatestMultiplier().subscribe(() => {
+      this.showMessage("Application of latest multiplier scheduled.", "success");
+    });
+  }
+
+  showMessage(message: string, type: string) {
+    this.message = message;
+    this.messageType = type;
+    setTimeout(() => {
+      this.message = null;
+      this.messageType = null;
+    }, 5000); // Message will disappear after 5 seconds
   }
 
 }

@@ -14,7 +14,7 @@
                     [(ngModel)]="developersFilter" />
             </div>
             <div class="col-md-6 d-flex justify-content-end">
-                <button class="btn btn-secondary" (click)="syncDevelopers()">Sync Developers</button>
+                <button class="btn btn-secondary" (click)="syncDevelopers()">Sync</button>
             </div>
             <div class="table-responsive mt-4">
                 <table class="table table-striped table-hover" *ngIf="!developersLoading || developers.length > 0">
