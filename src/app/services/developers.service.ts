@@ -39,4 +39,8 @@ export class DevelopersService {
     return this.httpClient.get<PaginatedResponse<PullRequestReview>>(url);
   }
 
+  syncDevelopers(): Observable<void> {
+    return this.httpClient.post<void>(`${this.gatewayUrl}/rest/developers/sync`, {});
+  }
+
 }
