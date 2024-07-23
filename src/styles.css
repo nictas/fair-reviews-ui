@@ -40,6 +40,11 @@
 }
 
 .modal-header {
-    background-color: #f57c00;
+    background: linear-gradient(90deg, #3182bd, #6baed6);
     color: white;
+}
+
+.btn-primary:disabled {
+    background-color: #495057;
+    border-color: #495057;
 }
