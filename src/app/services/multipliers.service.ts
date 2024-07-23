@@ -31,4 +31,8 @@ export class MultipliersService {
     return this.httpClient.post<Multiplier>(`${this.gatewayUrl}/rest/multipliers`, multiplier);
   }
 
+  applyLatestMultiplier(): Observable<void> {
+    return this.httpClient.post<void>(`${this.gatewayUrl}/rest/multipliers/latest/apply`, {});
+  }
+
 }
