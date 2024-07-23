@@ -9,6 +9,9 @@
                 <input id="filterInput" type="text" class="form-control" placeholder="Search..."
                     [(ngModel)]="multipliersFilter" />
             </div>
+            <div class="col-md-6 d-flex justify-content-end">
+                <button class="btn btn-secondary" (click)="openAddMultiplierModal()">Add Multiplier</button>
+            </div>
         </div>
         <div class="table-responsive">
             <table class="table table-striped table-hover" *ngIf="!multipliersLoading || multipliers.length > 0">
@@ -84,4 +87,6 @@
             </div>
         </div>
     </div>
+
+    <fr-add-multiplier-form [show]="showAddMultiplierForm" (close)="closeAddMultiplierModal()" />
 </div>

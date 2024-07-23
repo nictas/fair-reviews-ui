@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { DeveloperDetailComponent } from './developers/developer-detail.component';
@@ -12,6 +12,7 @@ import { MultiplierDetailComponent } from './multipliers/multiplier-detail.compo
 import { MultipliersComponent } from './multipliers/multipliers.component';
 import { ReviewDetailComponent } from './reviews/review-detail.component';
 import { ReviewsComponent } from './reviews/reviews.component';
+import { AddMultiplierComponent } from './multipliers/add-multiplier.component';
 
 @NgModule({
   declarations: [
@@ -22,11 +23,13 @@ import { ReviewsComponent } from './reviews/reviews.component';
     MultipliersComponent,
     MultiplierDetailComponent,
     ReviewDetailComponent,
-    DeveloperDetailComponent
+    DeveloperDetailComponent,
+    AddMultiplierComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
       { path: 'login-github', component: LoginComponent },
       { path: 'developers', component: DevelopersComponent },

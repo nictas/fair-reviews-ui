@@ -110,3 +110,9 @@
   margin-bottom: 0;
   margin-right: 0.5rem;
 }
+
+/* Adjust placeholder text in inputs */
+::placeholder {
+  font-style: italic;
+  color: #bcbec2;
+}

@@ -27,4 +27,8 @@ export class MultipliersService {
     return this.httpClient.get<Multiplier>(`${this.gatewayUrl}/rest/multipliers/${id}`);
   }
 
+  createMultiplier(multiplier: Multiplier): Observable<Multiplier> {
+    return this.httpClient.post<Multiplier>(`${this.gatewayUrl}/rest/multipliers`, multiplier);
+  }
+
 }

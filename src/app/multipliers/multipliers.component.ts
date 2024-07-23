@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { delay, Observable, tap } from 'rxjs';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable, tap } from 'rxjs';
 import { Multiplier } from '../model/Multiplier';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { MultipliersService } from '../services/multipliers.service';
@@ -17,7 +18,7 @@ export class MultipliersComponent implements OnInit {
   }
 
   get pageSize() {
-    return 5;
+    return 1;
   }
 
   private _multipliersFilter = '';
@@ -51,7 +52,9 @@ export class MultipliersComponent implements OnInit {
   sortDirection = 'desc';
   isAdmin = false;
   showConfirmDialog = false;
+  showAddMultiplierForm = false;
   multiplierToDelete: string | null = null;
+  addMultiplierForm!: FormGroup;
 
   constructor(
     private multipliersService: MultipliersService,
@@ -68,7 +71,7 @@ export class MultipliersComponent implements OnInit {
   private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<Multiplier>> {
     this.multipliersLoading = true;
     return this.multipliersService.getMultipliers(page, pageSize, this.sortField, this.sortDirection).pipe(
-      delay(2000), // Uncomment to test the loading indicator
+      // delay(2000), // Uncomment to test the loading indicator
       tap(page => console.log(`Fetched multipliers page: ${JSON.stringify(page)}`)),
       tap(page => this.multipliersLoading = false)
     );
@@ -96,6 +99,10 @@ export class MultipliersComponent implements OnInit {
       this.sortField = field;
       this.sortDirection = 'asc';  // Reset to ascending if a new field is clicked
     }
+    this.refreshOpenPages();
+  }
+
+  private refreshOpenPages() {
     this.fetchPage(0, (this.currentPage + 1) * this.pageSize).subscribe(page => {
       this.multipliers = page.content;
     });
@@ -134,6 +141,15 @@ export class MultipliersComponent implements OnInit {
       let id = multiplier.id.toLowerCase();
       return id.includes(filter);
     });
+  }
+
+  openAddMultiplierModal(): void {
+    this.showAddMultiplierForm = true;
+  }
+
+  closeAddMultiplierModal(): void {
+    this.showAddMultiplierForm = false;
+    this.refreshOpenPages();
   }
 
 }
