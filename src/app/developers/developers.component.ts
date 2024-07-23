@@ -53,7 +53,7 @@ export class DevelopersComponent implements OnInit {
   showConfirmDialog = false;
   developerToDelete: string | null = null;
   message: string | null = null;
-  messageType: string | null = null;
+  messageType: 'success' | 'error' | null = null;
 
   constructor(
     private developersService: DevelopersService,
@@ -141,17 +141,9 @@ export class DevelopersComponent implements OnInit {
 
   syncDevelopers() {
     this.developersService.syncDevelopers().subscribe(() => {
-      this.showMessage("Developer synchronization scheduled. Please refresh the page in a few moments to see the results.", "success");
+      this.message = "Developer synchronization scheduled. Please refresh the page in a few moments to see the results.";
+      this.messageType = "success"
     });
-  }
-
-  showMessage(message: string, type: string) {
-    this.message = message;
-    this.messageType = type;
-    setTimeout(() => {
-      this.message = null;
-      this.messageType = null;
-    }, 5000); // Message will disappear after 5 seconds
   }
 
 }
