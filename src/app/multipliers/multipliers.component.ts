@@ -4,6 +4,7 @@ import { Multiplier } from '../model/Multiplier';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { MultipliersService } from '../services/multipliers.service';
 import { UserInfoService } from '../services/user-info.service';
+import { mergeUnique } from '../shared/merge';
 
 @Component({
   templateUrl: './multipliers.component.html',
@@ -74,7 +75,7 @@ export class MultipliersComponent implements OnInit {
   }
 
   private vizualizePage(page: PaginatedResponse<Multiplier>): void {
-    this.multipliers = [...this.multipliers, ...page.content];
+    this.multipliers = mergeUnique(this.multipliers, page.content, multiplier => multiplier.id);
     this.totalPages = page.totalPages;
     this.currentPage = page.number;
   }

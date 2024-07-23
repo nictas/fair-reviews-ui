@@ -8,6 +8,7 @@ import { DevelopersService } from '../services/developers.service';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { UserInfoService } from '../services/user-info.service';
 import { ReviewsService } from '../services/reviews.service';
+import { mergeUnique } from '../shared/merge';
 
 @Component({
   templateUrl: './developer-detail.component.html',
@@ -90,7 +91,7 @@ export class DeveloperDetailComponent implements OnInit {
   }
 
   private vizualizePage(page: PaginatedResponse<PullRequestReview>): void {
-    this.reviews = [...this.reviews, ...page.content];
+    this.reviews = mergeUnique(this.reviews, page.content, review => review.id);
     this.totalPages = page.totalPages;
     this.currentPage = page.number;
   }
@@ -98,7 +99,7 @@ export class DeveloperDetailComponent implements OnInit {
   fetchPage(login: string, page: number, pageSize: number): Observable<PaginatedResponse<PullRequestReview>> {
     this.dataLoading = true;
     return this.developersService.getDeveloperHistory(login, page, pageSize, this.sortField, this.sortDirection).pipe(
-      delay(2000), // Uncomment to test the loading indicator
+      // delay(2000), // Uncomment to test the loading indicator
       tap(data => console.log(`Fetched data: ${JSON.stringify(data)}`)),
       tap(data => {
         this.dataLoading = false;

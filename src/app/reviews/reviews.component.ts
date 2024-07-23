@@ -4,6 +4,7 @@ import { PaginatedResponse } from '../model/PaginatedResponse';
 import { PullRequestReview } from '../model/PullRequestReview';
 import { ReviewsService } from '../services/reviews.service';
 import { UserInfoService } from '../services/user-info.service';
+import { mergeUnique } from '../shared/merge';
 
 @Component({
   templateUrl: './reviews.component.html',
@@ -74,7 +75,7 @@ export class ReviewsComponent implements OnInit {
   }
 
   private vizualizePage(page: PaginatedResponse<PullRequestReview>): void {
-    this.reviews = [...this.reviews, ...page.content];
+    this.reviews = mergeUnique(this.reviews, page.content, review => review.id);
     this.totalPages = page.totalPages;
     this.currentPage = page.number;
   }
