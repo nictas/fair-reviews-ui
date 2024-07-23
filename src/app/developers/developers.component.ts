@@ -51,6 +51,8 @@ export class DevelopersComponent implements OnInit {
   isAdmin = false;
   showConfirmDialog = false;
   developerToDelete: string | null = null;
+  message: string | null = null;
+  messageType: string | null = null;
 
   constructor(
     private developersService: DevelopersService,
@@ -74,9 +76,18 @@ export class DevelopersComponent implements OnInit {
   }
 
   private vizualizePage(page: PaginatedResponse<Developer>): void {
-    this.developers = [...this.developers, ...page.content];
+    this.developers = this.mergeDevelopers(this.developers, page.content);
     this.totalPages = page.totalPages;
     this.currentPage = page.number;
+  }
+
+  mergeDevelopers(existingDevelopers: Developer[], newDevelopers: Developer[]): Developer[] {
+    const existingLogins = new Set(existingDevelopers.map(developer => developer.login));
+    const result = [
+      ...existingDevelopers,
+      ...newDevelopers.filter(developer => !existingLogins.has(developer.login))
+    ];
+    return result;
   }
 
   loadMore(): void {
@@ -135,6 +146,22 @@ export class DevelopersComponent implements OnInit {
       return login.includes(filter) || email.includes(filter);
     });
   }
+
+  syncDevelopers() {
+    this.developersService.syncDevelopers().subscribe(() => {
+      this.showMessage("Developer synchronization scheduled. Please refresh the page in a few moments to see the results.", "success");
+    });
+  }
+
+  showMessage(message: string, type: string) {
+    this.message = message;
+    this.messageType = type;
+    setTimeout(() => {
+      this.message = null;
+      this.messageType = null;
+    }, 5000); // Message will disappear after 5 seconds
+  }
+
 }
 
 
