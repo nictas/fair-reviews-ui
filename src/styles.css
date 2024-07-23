@@ -38,3 +38,8 @@
     /* Darker shade for hover, focus, and active states */
     border-color: #e64a19;
 }
+
+.modal-header {
+    background-color: #f57c00;
+    color: white;
+}

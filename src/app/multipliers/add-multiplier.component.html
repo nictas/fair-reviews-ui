@@ -1,0 +1,135 @@
+<div *ngIf="show" class="modal fade show d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-lg border-0 shadow-lg">
+            <!-- Header -->
+            <div class="modal-header" style="background-color: #3182bd; color: white;">
+                <h5 class="modal-title">Add New Multiplier</h5>
+            </div>
+            <!-- Body -->
+            <div class="modal-body">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <!-- Default Additions Multiplier -->
+                    <div class="form-group row mb-4">
+                        <label class="col-md-6 col-form-label" for="defaultAdditionsMultiplier">Default Additions
+                            Multiplier</label>
+                        <div class="col-md-6">
+                            <input id="defaultAdditionsMultiplier" type="number" class="form-control"
+                                formControlName="defaultAdditionsMultiplier" placeholder="1.52">
+                            <div *ngIf="form.get('defaultAdditionsMultiplier')?.invalid && 
+                     (form.get('defaultAdditionsMultiplier')?.dirty || 
+                     form.get('defaultAdditionsMultiplier')?.touched)" class="text-danger mt-1">
+                                <div *ngIf="form.get('defaultAdditionsMultiplier')?.errors?.['required']">
+                                    Value is required.
+                                </div>
+                                <div *ngIf="form.get('defaultAdditionsMultiplier')?.errors?.['min']">
+                                    Value must be at least 0.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Default Deletions Multiplier -->
+                    <div class="form-group row mb-4">
+                        <label class="col-md-6 col-form-label" for="defaultDeletionsMultiplier">Default Deletions
+                            Multiplier</label>
+                        <div class="col-md-6">
+                            <input id="defaultDeletionsMultiplier" type="number" class="form-control"
+                                formControlName="defaultDeletionsMultiplier" placeholder="0.25">
+                            <div *ngIf="form.get('defaultDeletionsMultiplier')?.invalid && 
+                     (form.get('defaultDeletionsMultiplier')?.dirty || 
+                     form.get('defaultDeletionsMultiplier')?.touched)" class="text-danger mt-1">
+                                <div *ngIf="form.get('defaultDeletionsMultiplier')?.errors?.['required']">
+                                    Value is required.
+                                </div>
+                                <div *ngIf="form.get('defaultDeletionsMultiplier')?.errors?.['min']">
+                                    Value must be at least 0.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File Multipliers -->
+                    <div formArrayName="fileMultipliers">
+                        <div *ngFor="let fileMultiplier of fileMultipliers.controls; let i = index" [formGroupName]="i"
+                            class="card mb-4 shadow-sm">
+                            <div class="card-body">
+                                <div class="form-row mb-3">
+                                    <!-- File Extension -->
+                                    <div class="form-group row mb-4">
+                                        <label class="col-md-6 col-form-label" for="fileExtension">File
+                                            Extension</label>
+                                        <div class="col-md-6">
+                                            <input id="fileExtension" type="text" class="form-control"
+                                                formControlName="fileExtension" placeholder=".java">
+                                            <div *ngIf="fileMultiplier.get('fileExtension')?.invalid && 
+                             (fileMultiplier.get('fileExtension')?.dirty || 
+                              fileMultiplier.get('fileExtension')?.touched)" class="text-danger mt-1">
+                                                <div *ngIf="fileMultiplier.get('fileExtension')?.errors?.['required']">
+                                                    Value is required.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Additions Multiplier -->
+                                    <div class="form-group row mb-4">
+                                        <label class="col-md-6 col-form-label" for="additionsMultiplier">Additions
+                                            Multiplier</label>
+                                        <div class="col-md-6">
+                                            <input id="additionsMultiplier" type="number" class="form-control"
+                                                formControlName="additionsMultiplier" placeholder="1.52">
+                                            <div *ngIf="fileMultiplier.get('additionsMultiplier')?.invalid && 
+                             (fileMultiplier.get('additionsMultiplier')?.dirty || 
+                              fileMultiplier.get('additionsMultiplier')?.touched)" class="text-danger mt-1">
+                                                <div
+                                                    *ngIf="fileMultiplier.get('additionsMultiplier')?.errors?.['required']">
+                                                    Value is required.
+                                                </div>
+                                                <div *ngIf="fileMultiplier.get('additionsMultiplier')?.errors?.['min']">
+                                                    Value must be at least 0.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Deletions Multiplier -->
+                                    <div class="form-group row mb-4">
+                                        <label class="col-md-6 col-form-label" for="deletionsMultiplier">Deletions
+                                            Multiplier</label>
+                                        <div class="col-md-6">
+                                            <input id="deletionsMultiplier" type="number" class="form-control"
+                                                formControlName="deletionsMultiplier" placeholder="0.25">
+                                            <div *ngIf="fileMultiplier.get('deletionsMultiplier')?.invalid && 
+                             (fileMultiplier.get('deletionsMultiplier')?.dirty || 
+                              fileMultiplier.get('deletionsMultiplier')?.touched)" class="text-danger mt-1">
+                                                <div
+                                                    *ngIf="fileMultiplier.get('deletionsMultiplier')?.errors?.['required']">
+                                                    Value is required.
+                                                </div>
+                                                <div *ngIf="fileMultiplier.get('deletionsMultiplier')?.errors?.['min']">
+                                                    Value must be at least 0.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <button class="btn btn-danger btn-sm" (click)="removeFileMultiplier(i)"
+                                        aria-label="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary mb-3" (click)="addFileMultiplier()">Add File
+                        Multiplier</button>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Create</button>
+                        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
