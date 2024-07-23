@@ -13,6 +13,7 @@ import { MultipliersComponent } from './multipliers/multipliers.component';
 import { ReviewDetailComponent } from './reviews/review-detail.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { AddMultiplierComponent } from './multipliers/add-multiplier.component';
+import { MessageComponent } from './shared/message.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AddMultiplierComponent } from './multipliers/add-multiplier.component';
     MultiplierDetailComponent,
     ReviewDetailComponent,
     DeveloperDetailComponent,
-    AddMultiplierComponent
+    AddMultiplierComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
