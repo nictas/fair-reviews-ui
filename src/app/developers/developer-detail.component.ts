@@ -137,6 +137,9 @@ export class DeveloperDetailComponent implements OnInit {
   deleteMultiplier(): void {
     if (this.reviewToDelete) {
       this.reviewsService.deleteReview(this.reviewToDelete).subscribe(() => {
+        this.developersService.getDeveloper(this.login).subscribe(developer => {
+          this.developer = developer; // Refresh the developer score
+        })
         this.reviews = this.reviews.filter(review => review.id !== this.reviewToDelete);
         this.showConfirmDialog = false;
         this.reviewToDelete = null;
