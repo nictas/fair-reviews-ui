@@ -21,6 +21,12 @@
             <dt class="col-sm-4">Score:</dt>
             <dd class="col-sm-8">{{developer?.score | number:'1.2-2'}}</dd>
         </dl>
+        <div *ngIf="isAdmin" class="d-flex justify-content-end">
+            <button *ngIf="developer" class="btn btn-danger btn-sm"
+                (click)="confirmDelete('developer', developer.login)" aria-label="Delete">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -74,7 +80,7 @@
                                 [routerLink]="['/multipliers', review.multiplier.id]"
                                 class="text-primary">{{review.multiplier.id | slice:0:8}}</a></td>
                         <td *ngIf="isAdmin">
-                            <button class="btn btn-danger btn-sm" (click)="confirmDelete(review.id)"
+                            <button class="btn btn-danger btn-sm" (click)="confirmDelete('review', review.id)"
                                 aria-label="Delete">
                                 <i class="bi bi-trash"></i>
                             </button>
@@ -104,10 +110,10 @@
                     <h5 class="modal-title">Confirm Deletion</h5>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete review {{reviewToDelete}}?</p>
+                    <p>Are you sure you want to delete {{entityToDelete}} {{entityToDeleteId}}?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" (click)="deleteMultiplier()">Confirm</button>
+                    <button type="button" class="btn btn-danger" (click)="deleteEntity()">Confirm</button>
                     <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
                 </div>
             </div>

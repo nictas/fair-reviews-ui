@@ -29,6 +29,29 @@
             <dd class="col-sm-8"><a
                     [routerLink]="['/multipliers', review?.multiplier?.id]">{{review?.multiplier?.id}}</a></dd>
         </dl>
+        <div *ngIf="isAdmin" class="d-flex justify-content-end">
+            <button *ngIf="review" class="btn btn-danger btn-sm" (click)="confirmDelete(review.id)" aria-label="Delete">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Dialog -->
+<div *ngIf="showConfirmDialog" class="modal fade show d-block" tabindex="-1" role="dialog" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-lg border-0 shadow-lg">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirm Deletion</h5>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete review {{reviewToDelete}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="deleteReview()">Confirm</button>
+                <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { delay, tap } from 'rxjs';
 import { ChangedFile, PullRequestReview } from '../model/PullRequestReview';
 import { ReviewsService } from '../services/reviews.service';
+import { UserInfoService } from '../services/user-info.service';
 
 @Component({
   templateUrl: './review-detail.component.html',
@@ -16,6 +17,9 @@ export class ReviewDetailComponent implements OnInit {
   shownChangedFiles: ChangedFile[] = [];
   dataLoading = true;
   isCollapsed = false;
+  showConfirmDialog = false;
+  reviewToDelete: string | null = null;
+  isAdmin = false;
 
   private _filter = '';
   get filter(): string {
@@ -28,6 +32,7 @@ export class ReviewDetailComponent implements OnInit {
   }
 
   constructor(
+    private userInfoService: UserInfoService,
     private reviewsService: ReviewsService,
     private route: ActivatedRoute,
     private location: Location
@@ -37,6 +42,9 @@ export class ReviewDetailComponent implements OnInit {
     const reviewId = this.route.snapshot.paramMap.get('id');
     if (reviewId) {
       this.dataLoading = true;
+      this.userInfoService.isAdmin().subscribe(isAdmin => {
+        this.isAdmin = isAdmin;
+      });
       this.reviewsService.getReview(reviewId).pipe(
         delay(2000), // Uncomment to test the loading indicator
         tap(data => console.log(`Fetched data: ${JSON.stringify(data)}`)),
@@ -71,6 +79,26 @@ export class ReviewDetailComponent implements OnInit {
     const total = value + otherValue;
     if (total === 0) return 0;
     return (value / total) * 100;
+  }
+
+  confirmDelete(id: string | null): void {
+    this.reviewToDelete = id;
+    this.showConfirmDialog = true;
+  }
+
+  cancelDelete(): void {
+    this.showConfirmDialog = false;
+    this.reviewToDelete = null;
+  }
+
+  deleteReview(): void {
+    if (this.reviewToDelete) {
+      this.reviewsService.deleteReview(this.reviewToDelete).subscribe(() => {
+        this.showConfirmDialog = false;
+        this.reviewToDelete = null;
+        this.goBack();
+      });
+    }
   }
 
 }
