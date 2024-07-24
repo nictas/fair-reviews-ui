@@ -3,11 +3,15 @@
         <h3 class="mb-0">{{pageTitle}}</h3>
     </div>
     <div class="card-body">
+        <fr-message [message]="message" [messageType]="messageType" [messageDuration]="10000" />
         <div class="row mb-3">
             <div class="col-md-6 d-flex align-items-center">
                 <label for="filterInput" class="form-label mb-0 mr-2">Filter:</label>
                 <input id="filterInput" type="text" class="form-control" placeholder="Search..."
                     [(ngModel)]="reviewsFilter" />
+            </div>
+            <div *ngIf="isAdmin" class="col-md-6 d-flex justify-content-end">
+                <button class="btn btn-secondary" (click)="showAddForm()">New</button>
             </div>
         </div>
         <div class="table-responsive">
@@ -93,4 +97,6 @@
             </div>
         </div>
     </div>
+
+    <fr-add-review-form [show]="addFormVisible" (reviews)="hideAddForm($event)" />
 </div>

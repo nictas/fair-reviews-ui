@@ -52,6 +52,9 @@ export class ReviewsComponent implements OnInit {
   isAdmin = false;
   showConfirmDialog = false;
   reviewToDelete: string | null = null;
+  addFormVisible = false;
+  message: string | null = null;
+  messageType: "error" | "success" | null = null;
 
   constructor(
     private reviewsService: ReviewsService,
@@ -96,6 +99,10 @@ export class ReviewsComponent implements OnInit {
       this.sortField = field;
       this.sortDirection = 'asc';  // Reset to ascending if a new field is clicked
     }
+    this.refreshOpenPages();
+  }
+
+  private refreshOpenPages() {
     this.fetchPage(0, (this.currentPage + 1) * this.pageSize).subscribe(page => {
       this.reviews = page.content;
     });
@@ -137,6 +144,21 @@ export class ReviewsComponent implements OnInit {
       let developerLogin = review.developer.login.toLowerCase();
       return id.includes(filter) || multiplierId.includes(filter) || url.includes(filter) || developerLogin.includes(filter);
     });
+  }
+
+  showAddForm(): void {
+    this.addFormVisible = true;
+  }
+
+  hideAddForm(reviews: PullRequestReview[] | null): void {
+    this.addFormVisible = false;
+    console.log(`Received reviews ${JSON.stringify(reviews)}`);
+    if (reviews && reviews.length > 0) {
+      const assignees = reviews.map(review => review.developer.login).join(', ');
+      this.message = `Pull request has been assigned to ${assignees}, granting them an additional score of ${reviews[0].score}.`
+      this.messageType = 'success';
+      this.refreshOpenPages();
+    }
   }
 
 }

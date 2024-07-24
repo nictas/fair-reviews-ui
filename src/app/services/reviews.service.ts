@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { PullRequestReview } from '../model/PullRequestReview';
+import { PullRequestAssignRequest } from '../model/PullRequestAssignRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,10 @@ export class ReviewsService {
 
   getReview(id: string): Observable<PullRequestReview> {
     return this.httpClient.get<PullRequestReview>(`${this.gatewayUrl}/rest/reviews/${id}`);
+  }
+
+  createReview(request: PullRequestAssignRequest): Observable<PullRequestReview[]> {
+    return this.httpClient.post<PullRequestReview[]>(`${this.gatewayUrl}/rest/reviews/assign`, request);
   }
 
 }
