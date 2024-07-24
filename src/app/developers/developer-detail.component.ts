@@ -53,9 +53,9 @@ export class DeveloperDetailComponent implements OnInit {
 
   currentPage = 0;
   totalPages = 0;
-  reviewToDelete: string | null = null;
+  entityToDelete: 'developer' | 'review' | null = null;
+  entityToDeleteId: string | null = null;
   showConfirmDialog = false;
-
 
   constructor(
     private userInfoService: UserInfoService,
@@ -125,25 +125,48 @@ export class DeveloperDetailComponent implements OnInit {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  confirmDelete(id: string): void {
-    this.reviewToDelete = id;
+  confirmDelete(type: 'developer' | 'review', id: string): void {
+    this.entityToDelete = type;
+    this.entityToDeleteId = id;
     this.showConfirmDialog = true;
   }
 
   cancelDelete(): void {
     this.showConfirmDialog = false;
-    this.reviewToDelete = null;
+    this.entityToDeleteId = null;
+    this.entityToDelete = null;
   }
 
-  deleteMultiplier(): void {
-    if (this.reviewToDelete) {
-      this.reviewsService.deleteReview(this.reviewToDelete).subscribe(() => {
+  deleteEntity(): void {
+    if (this.entityToDelete === 'review') {
+      this.deleteReview();
+    }
+    if (this.entityToDelete === 'developer') {
+      this.deleteDeveloper();
+    }
+  }
+
+  private deleteReview() {
+    if (this.entityToDeleteId) {
+      this.reviewsService.deleteReview(this.entityToDeleteId).subscribe(() => {
         this.developersService.getDeveloper(this.login).subscribe(developer => {
           this.developer = developer; // Refresh the developer score
-        })
-        this.reviews = this.reviews.filter(review => review.id !== this.reviewToDelete);
+        });
+        this.reviews = this.reviews.filter(review => review.id !== this.entityToDeleteId);
         this.showConfirmDialog = false;
-        this.reviewToDelete = null;
+        this.entityToDeleteId = null;
+        this.entityToDelete = null;
+      });
+    }
+  }
+
+  deleteDeveloper() {
+    if (this.entityToDeleteId) {
+      this.developersService.deleteDeveloper(this.entityToDeleteId).subscribe(() => {
+        this.showConfirmDialog = false;
+        this.entityToDeleteId = null;
+        this.entityToDelete = null;
+        this.goBack();
       });
     }
   }

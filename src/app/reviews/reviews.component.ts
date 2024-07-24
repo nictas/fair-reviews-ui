@@ -116,8 +116,8 @@ export class ReviewsComponent extends MessageBaseComponent implements OnInit {
     return '';
   }
 
-  confirmDelete(login: string): void {
-    this.reviewToDelete = login;
+  confirmDelete(id: string): void {
+    this.reviewToDelete = id;
     this.showConfirmDialog = true;
   }
 

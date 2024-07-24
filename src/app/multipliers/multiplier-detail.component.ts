@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { delay, tap } from 'rxjs';
 import { FileMultiplier, Multiplier } from '../model/Multiplier';
 import { MultipliersService } from '../services/multipliers.service';
+import { UserInfoService } from '../services/user-info.service';
 
 @Component({
   templateUrl: './multiplier-detail.component.html',
@@ -16,6 +17,9 @@ export class MultiplierDetailComponent implements OnInit {
   shownFileMultipliers: FileMultiplier[] = [];
   dataLoading = true;
   isCollapsed = false;
+  showConfirmDialog = false;
+  multiplierToDelete: string | null = null;
+  isAdmin = false;
 
   private _filter = '';
   get filter(): string {
@@ -28,6 +32,7 @@ export class MultiplierDetailComponent implements OnInit {
   }
 
   constructor(
+    private userInfoService: UserInfoService,
     private multipliersService: MultipliersService,
     private route: ActivatedRoute,
     private location: Location
@@ -37,6 +42,9 @@ export class MultiplierDetailComponent implements OnInit {
     const multiplierId = this.route.snapshot.paramMap.get('id');
     if (multiplierId) {
       this.dataLoading = true;
+      this.userInfoService.isAdmin().subscribe(isAdmin => {
+        this.isAdmin = isAdmin;
+      });
       this.multipliersService.getMultiplier(multiplierId).pipe(
         delay(2000), // Uncomment to test the loading indicator
         tap(data => console.log(`Fetched data: ${JSON.stringify(data)}`)),
@@ -66,6 +74,26 @@ export class MultiplierDetailComponent implements OnInit {
 
   toggleCollapse() {
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  confirmDelete(id: string | null): void {
+    this.multiplierToDelete = id;
+    this.showConfirmDialog = true;
+  }
+
+  cancelDelete(): void {
+    this.showConfirmDialog = false;
+    this.multiplierToDelete = null;
+  }
+
+  deleteMultiplier(): void {
+    if (this.multiplierToDelete) {
+      this.multipliersService.deleteMultiplier(this.multiplierToDelete).subscribe(() => {
+        this.showConfirmDialog = false;
+        this.multiplierToDelete = null;
+        this.goBack();
+      });
+    }
   }
 
 }
