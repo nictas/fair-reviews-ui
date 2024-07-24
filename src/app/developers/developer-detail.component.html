@@ -60,7 +60,7 @@
                             Multiplier
                             <span [ngClass]="getSortArrowClass('multiplier.id')"></span>
                         </th>
-                        <th>Actions</th>
+                        <th *ngIf="isAdmin">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
