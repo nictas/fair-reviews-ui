@@ -64,8 +64,8 @@ export class MultipliersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.userInfoService.getUserInfo().subscribe(userInfo => {
-      this.isAdmin = userInfo.roles.includes('ROLE_ADMIN');
+    this.userInfoService.isAdmin().subscribe(isAdmin => {
+      this.isAdmin = isAdmin;
       this.fetchPage(this.currentPage, this.pageSize).subscribe(page => this.vizualizePage(page));
     });
   }

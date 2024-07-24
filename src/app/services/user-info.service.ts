@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserInfo } from '../model/UserInfo';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
+import { UserInfo } from '../model/UserInfo';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,10 @@ export class UserInfoService {
 
   getUserInfo(): Observable<UserInfo> {
     return this.httpClient.get<UserInfo>(`${this.gatewayUrl}/rest/user-info`);
+  }
+
+  isAdmin(): Observable<boolean> {
+    return this.getUserInfo().pipe(map(userInfo => userInfo.roles.includes("ROLE_ADMIN")));
   }
 
   logout(): Observable<void> {

@@ -10,7 +10,7 @@
                 <input id="filterInput" type="text" class="form-control" placeholder="Search..."
                     [(ngModel)]="multipliersFilter" />
             </div>
-            <div class="col-md-6 d-flex justify-content-end">
+            <div *ngIf="isAdmin" class="col-md-6 d-flex justify-content-end">
                 <button class="btn btn-secondary" (click)="openAddMultiplierModal()"
                     style="margin-right: 1rem;">New</button>
                 <button class="btn btn-secondary" (click)="applyLatestMultiplier()">Apply Latest</button>

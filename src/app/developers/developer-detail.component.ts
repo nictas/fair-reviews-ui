@@ -66,8 +66,8 @@ export class DeveloperDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.userInfoService.getUserInfo().subscribe(userInfo => {
-      this.isAdmin = userInfo.roles.includes('ROLE_ADMIN');
+    this.userInfoService.isAdmin().subscribe(isAdmin => {
+      this.isAdmin = isAdmin;
       const loginParameter = this.route.snapshot.paramMap.get('login');
       if (loginParameter != null) {
         this.login = loginParameter;
