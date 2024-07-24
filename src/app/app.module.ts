@@ -8,13 +8,12 @@ import { AppComponent } from './app.component';
 import { DeveloperDetailComponent } from './developers/developer-detail.component';
 import { DevelopersComponent } from './developers/developers.component';
 import { LoginComponent } from './login/login.component';
+import { AddMultiplierComponent } from './multipliers/add-multiplier.component';
 import { MultiplierDetailComponent } from './multipliers/multiplier-detail.component';
 import { MultipliersComponent } from './multipliers/multipliers.component';
+import { AddReviewComponent } from './reviews/add-review.component';
 import { ReviewDetailComponent } from './reviews/review-detail.component';
 import { ReviewsComponent } from './reviews/reviews.component';
-import { AddMultiplierComponent } from './multipliers/add-multiplier.component';
-import { MessageComponent } from './shared/message.component';
-import { AddReviewComponent } from './reviews/add-review.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +26,6 @@ import { AddReviewComponent } from './reviews/add-review.component';
     ReviewDetailComponent,
     DeveloperDetailComponent,
     AddMultiplierComponent,
-    MessageComponent,
     AddReviewComponent
   ],
   imports: [

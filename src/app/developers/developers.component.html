@@ -3,7 +3,10 @@
         <h3 class="mb-0">{{pageTitle}}</h3>
     </div>
     <div class="card-body">
-        <fr-message [message]="message" [messageType]="messageType" />
+        <div *ngIf="message" class="alert"
+            [ngClass]="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'failure'}">
+            {{ message }}
+        </div>
         <div class="row mb-3">
             <div class="col-md-6 d-flex align-items-center">
                 <label for="filterInput" class="form-label mb-0 mr-2">Filter:</label>
