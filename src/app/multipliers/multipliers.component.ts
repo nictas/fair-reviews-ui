@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Observable, tap } from 'rxjs';
 import { Multiplier } from '../model/Multiplier';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { MultipliersService } from '../services/multipliers.service';
 import { UserInfoService } from '../services/user-info.service';
 import { mergeUnique } from '../shared/merge';
+import { MessageBaseComponent } from '../shared/message-base.component';
 
 @Component({
   templateUrl: './multipliers.component.html',
   styleUrls: ['./multipliers.component.css']
 })
-export class MultipliersComponent implements OnInit {
+export class MultipliersComponent extends MessageBaseComponent implements OnInit {
 
   get pageTitle() {
     return 'Multipliers';
@@ -55,13 +56,13 @@ export class MultipliersComponent implements OnInit {
   showAddMultiplierForm = false;
   multiplierToDelete: string | null = null;
   addMultiplierForm!: FormGroup;
-  message: string | null = null;
-  messageType: 'success' | 'error' | null = null;
 
   constructor(
     private multipliersService: MultipliersService,
     private userInfoService: UserInfoService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.userInfoService.isAdmin().subscribe(isAdmin => {
@@ -156,8 +157,7 @@ export class MultipliersComponent implements OnInit {
 
   applyLatestMultiplier() {
     this.multipliersService.applyLatestMultiplier().subscribe(() => {
-      this.message = "Application of latest multiplier scheduled.";
-      this.messageType = "success";
+      this.showSuccessMessage("Application of latest multiplier scheduled.");
     });
   }
 

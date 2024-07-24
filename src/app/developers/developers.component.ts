@@ -5,12 +5,13 @@ import { PaginatedResponse } from '../model/PaginatedResponse';
 import { DevelopersService } from '../services/developers.service';
 import { UserInfoService } from '../services/user-info.service';
 import { mergeUnique } from '../shared/merge';
+import { MessageBaseComponent } from '../shared/message-base.component';
 
 @Component({
   templateUrl: './developers.component.html',
   styleUrls: ['./developers.component.css']
 })
-export class DevelopersComponent implements OnInit {
+export class DevelopersComponent extends MessageBaseComponent implements OnInit {
 
   get pageTitle() {
     return 'Developers';
@@ -52,13 +53,13 @@ export class DevelopersComponent implements OnInit {
   isAdmin = false;
   showConfirmDialog = false;
   developerToDelete: string | null = null;
-  message: string | null = null;
-  messageType: 'success' | 'error' | null = null;
 
   constructor(
     private developersService: DevelopersService,
     private userInfoService: UserInfoService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.userInfoService.isAdmin().subscribe(isAdmin => {
@@ -141,11 +142,8 @@ export class DevelopersComponent implements OnInit {
 
   syncDevelopers() {
     this.developersService.syncDevelopers().subscribe(() => {
-      this.message = "Developer synchronization scheduled. Please refresh the page in a few moments to see the results.";
-      this.messageType = "success"
+      this.showSuccessMessage("Developer synchronization scheduled. Please refresh the page in a few moments to see the results.");
     });
   }
 
 }
-
-

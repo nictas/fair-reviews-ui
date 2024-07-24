@@ -5,12 +5,13 @@ import { PullRequestReview } from '../model/PullRequestReview';
 import { ReviewsService } from '../services/reviews.service';
 import { UserInfoService } from '../services/user-info.service';
 import { mergeUnique } from '../shared/merge';
+import { MessageBaseComponent } from '../shared/message-base.component';
 
 @Component({
   templateUrl: './reviews.component.html',
   styleUrls: ['./reviews.component.css']
 })
-export class ReviewsComponent implements OnInit {
+export class ReviewsComponent extends MessageBaseComponent implements OnInit {
 
   get pageTitle() {
     return 'Pull Request Reviews';
@@ -53,13 +54,13 @@ export class ReviewsComponent implements OnInit {
   showConfirmDialog = false;
   reviewToDelete: string | null = null;
   addFormVisible = false;
-  message: string | null = null;
-  messageType: "error" | "success" | null = null;
 
   constructor(
     private reviewsService: ReviewsService,
     private userInfoService: UserInfoService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.userInfoService.isAdmin().subscribe(isAdmin => {
@@ -155,8 +156,7 @@ export class ReviewsComponent implements OnInit {
     console.log(`Received reviews ${JSON.stringify(reviews)}`);
     if (reviews && reviews.length > 0) {
       const assignees = reviews.map(review => review.developer.login).join(', ');
-      this.message = `Pull request has been assigned to ${assignees}, granting them an additional score of ${reviews[0].score}.`
-      this.messageType = 'success';
+      this.showSuccessMessage(`Pull request has been assigned to ${assignees}, granting them an additional score of ${reviews[0].score}.`, 15000);
       this.refreshOpenPages();
     }
   }
