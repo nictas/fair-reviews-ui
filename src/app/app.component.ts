@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { UserInfoService } from './services/user-info.service';
-import { UserInfo } from './model/UserInfo';
-import { NavigationStart, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserInfo } from './model/UserInfo';
+import { UserInfoService } from './services/user-info.service';
 
 @Component({
   selector: 'fr-root',
@@ -10,28 +10,19 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'fair-reviews-ui';
   isUserAuthenticated = false;
   userLogin: string | undefined;
-  userRole: string = 'User'; // Default role
-  redirectUrl = '/developers';
+  userRole: 'Administrator' | 'User' | undefined;
 
-  constructor(private userInfoService: UserInfoService, private router: Router) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        this.redirectUrl = event.url;
-      }
-    });
-  }
+  constructor(private userInfoService: UserInfoService, private router: Router) { }
 
   ngOnInit(): void {
     this.userInfoService.getUserInfo().subscribe(
       (userInfo: UserInfo) => {
-        // If successful, store user info and redirect to /developers
+        // If successful, store user info
         this.isUserAuthenticated = true;
         this.userLogin = userInfo.login;
         this.userRole = userInfo.roles.includes('ROLE_ADMIN') ? 'Administrator' : 'User';
-        this.router.navigate([this.redirectUrl]);
       },
       (error: HttpErrorResponse) => {
         console.log('An error occurred:', error);
