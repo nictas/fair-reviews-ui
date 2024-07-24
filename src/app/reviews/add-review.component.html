@@ -1,0 +1,81 @@
+<div *ngIf="show" class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content rounded-lg border-0 shadow-lg">
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title">Add New Review</h5>
+      </div>
+      <!-- Body -->
+      <div class="modal-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <!-- Pull Request URL -->
+          <div class="form-group mb-4">
+            <label for="pullRequestUrl">Pull Request URL</label>
+            <input id="pullRequestUrl" type="text" class="form-control" formControlName="pullRequestUrl" />
+            <div
+              *ngIf="form.get('pullRequestUrl')?.invalid && (form.get('pullRequestUrl')?.touched || form.get('pullRequestUrl')?.dirty)"
+              class="text-danger">
+              <div *ngIf="form.get('pullRequestUrl')?.errors?.['required']">URL is required.</div>
+              <div *ngIf="form.get('pullRequestUrl')?.errors?.['pattern']">URL must be valid.</div>
+            </div>
+          </div>
+
+          <!-- Assignee List -->
+          <div class="card mb-4">
+            <div class="card-header">Assignee List</div>
+            <div class="card-body">
+              <div formArrayName="assigneeList">
+                <div *ngFor="let assignee of assigneeList.controls; let i = index" [formGroupName]="i"
+                  class="form-group row align-items-center mb-2">
+                  <div class="col-md-10">
+                    <select formControlName="assignee" class="form-select">
+                      <option *ngFor="let developer of developers" [value]="developer.login">{{ developer.login }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-2 text-right">
+                    <button type="button" class="btn btn-danger btn-sm" (click)="removeAssignee(i)" aria-label="Delete">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary mt-3" (click)="addAssignee()">Add</button>
+            </div>
+          </div>
+
+          <!-- Assignee Exclusion List -->
+          <div class="card mb-4">
+            <div class="card-header">Assignee Exclusion List</div>
+            <div class="card-body">
+              <div formArrayName="assigneeExclusionList">
+                <div *ngFor="let assignee of assigneeExclusionList.controls; let i = index" [formGroupName]="i"
+                  class="form-group row align-items-center mb-2">
+                  <div class="col-md-10">
+                    <select formControlName="assignee" class="form-select">
+                      <option *ngFor="let developer of developers" [value]="developer.login">{{ developer.login }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-2 text-right">
+                    <button type="button" class="btn btn-danger btn-sm" (click)="removeAssigneeExclusion(i)"
+                      aria-label="Delete">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary mt-3" (click)="addAssigneeExclusion()">Add</button>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Create</button>
+            <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

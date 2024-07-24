@@ -8,6 +8,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 export class MessageComponent implements OnChanges {
   @Input() message: string | null = null;
   @Input() messageType: 'success' | 'error' | null = null;
+  @Input() messageDuration = 5000;
   private timer: any;
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -20,7 +21,7 @@ export class MessageComponent implements OnChanges {
     if (this.timer) {
       clearTimeout(this.timer);
     }
-    this.timer = setTimeout(() => this.clearMessage(), 5000); // Message will disappear after 5 seconds
+    this.timer = setTimeout(() => this.clearMessage(), this.messageDuration);
   }
 
   private clearMessage(): void {
