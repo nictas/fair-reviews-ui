@@ -19,7 +19,14 @@ export abstract class BaseService {
 
     private handleError(error: HttpErrorResponse): Observable<null> {
         if (error.status === 401) {
-            this.logout().subscribe(() => this.router.navigate(['/login-github']));
+            this.logout().pipe(
+                catchError(error => {
+                    if (error.status === 403) {
+                        console.log(`Received 403 from /logout endpoint. User must not be logged in.`);
+                    }
+                    return of(null);
+                })
+            ).subscribe(() => this.router.navigate(['/login-github']));
         } else {
             this.globalMessageService.showFailureMessage(`An error occurred while communicating with the server. Error details: ${JSON.stringify(error.error)}`);
         }
