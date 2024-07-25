@@ -26,7 +26,7 @@
         <li class="nav-item dropdown" *ngIf="isUserAuthenticated">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            {{ userLogin }}
+            {{ user }}
             <span class="badge" [ngClass]="userRole === 'Administrator' ? 'badge-administrator' : 'badge-user'">{{
               userRole}}</span>
           </a>
@@ -39,6 +39,11 @@
   </div>
 </nav>
 
-<div class="container mt-4">
+<div *ngIf="message" class="alert m-4"
+  [ngClass]="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'failure'}">
+  {{ message }}
+</div>
+
+<div *ngIf="isUserAuthenticated" class="container mt-4">
   <router-outlet></router-outlet>
 </div>
