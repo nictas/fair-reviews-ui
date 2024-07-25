@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -15,6 +15,8 @@ import { AddReviewComponent } from './reviews/add-review.component';
 import { ReviewDetailComponent } from './reviews/review-detail.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { MessageComponent } from './shared/message.component';
+// import { CsrfInterceptor } from './services/csrf-interceptor';
+// import { DebugInterceptor } from './services/debug-interceptor';
 
 @NgModule({
   declarations: [
@@ -44,9 +46,13 @@ import { MessageComponent } from './shared/message.component';
       { path: 'multipliers/:id', component: MultiplierDetailComponent },
       { path: '', redirectTo: 'developers', pathMatch: 'full' },
       { path: '**', redirectTo: 'developers', pathMatch: 'full' }
-    ])
+    ]),
   ],
-  providers: [provideHttpClient(withInterceptorsFromDi())],
+  providers: [
+    provideHttpClient(
+      withXsrfConfiguration({ cookieName: 'XSRF-TOKEN', headerName: 'X-XSRF-TOKEN' })
+    )
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

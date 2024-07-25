@@ -22,7 +22,7 @@ export class DevelopersService extends BaseService {
   }
 
   getDevelopers(page: number, size: number, sort: string, direction: string): Observable<PaginatedResponse<Developer> | null> {
-    let url = `${this.gatewayUrl}/rest/developers?page=${page}&size=${size}&sort=${sort},${direction}`;
+    let url = `/rest/developers?page=${page}&size=${size}&sort=${sort},${direction}`;
     if (sort !== 'login') {
       url += '&sort=login,asc';
     }
@@ -30,17 +30,17 @@ export class DevelopersService extends BaseService {
   }
 
   deleteDeveloper(login: string): Observable<true | null> {
-    return this.request(client => client.delete<void>(`${this.gatewayUrl}/rest/developers/${login}`).pipe(
+    return this.request(client => client.delete<void>(`/rest/developers/${login}`).pipe(
       map(unused => true)
     ));
   }
 
   getDeveloper(login: string): Observable<Developer | null> {
-    return this.request(client => client.get<Developer>(`${this.gatewayUrl}/rest/developers/${login}`));
+    return this.request(client => client.get<Developer>(`/rest/developers/${login}`));
   }
 
   getDeveloperHistory(login: string, page: number, size: number, sort: string, direction: string): Observable<PaginatedResponse<PullRequestReview> | null> {
-    let url = `${this.gatewayUrl}/rest/developers/${login}/history?page=${page}&size=${size}&sort=${sort},${direction}`;
+    let url = `/rest/developers/${login}/history?page=${page}&size=${size}&sort=${sort},${direction}`;
     if (sort !== 'id') {
       url += '&sort=id,asc';
     }
@@ -48,7 +48,7 @@ export class DevelopersService extends BaseService {
   }
 
   syncDevelopers(): Observable<true | null> {
-    return this.request(client => client.post<void>(`${this.gatewayUrl}/rest/developers/sync`, {}).pipe(
+    return this.request(client => client.post<void>(`/rest/developers/sync`, {}).pipe(
       map(unused => true)
     ));
   }
