@@ -21,26 +21,26 @@ export class MultipliersService extends BaseService {
   }
 
   getMultipliers(page: number, size: number, sort: string, direction: string): Observable<PaginatedResponse<Multiplier> | null> {
-    let url = `${this.gatewayUrl}/rest/multipliers?page=${page}&size=${size}&sort=${sort},${direction}&sort=id,asc`;
+    let url = `/rest/multipliers?page=${page}&size=${size}&sort=${sort},${direction}&sort=id,asc`;
     return this.request(client => client.get<PaginatedResponse<Multiplier>>(url));
   }
 
   deleteMultiplier(id: string): Observable<true | null> {
-    return this.request(client => client.delete<void>(`${this.gatewayUrl}/rest/multipliers/${id}`).pipe(
+    return this.request(client => client.delete<void>(`/rest/multipliers/${id}`).pipe(
       map(unused => true)
     ));
   }
 
   getMultiplier(id: string): Observable<Multiplier | null> {
-    return this.request(client => client.get<Multiplier>(`${this.gatewayUrl}/rest/multipliers/${id}`));
+    return this.request(client => client.get<Multiplier>(`/rest/multipliers/${id}`));
   }
 
   createMultiplier(multiplier: Multiplier): Observable<Multiplier | null> {
-    return this.request(client => client.post<Multiplier>(`${this.gatewayUrl}/rest/multipliers`, multiplier));
+    return this.request(client => client.post<Multiplier>(`/rest/multipliers`, multiplier));
   }
 
   applyLatestMultiplier(): Observable<true | null> {
-    return this.request(client => client.post<void>(`${this.gatewayUrl}/rest/multipliers/latest/apply`, {}).pipe(
+    return this.request(client => client.post<void>(`/rest/multipliers/latest/apply`, {}).pipe(
       map(unused => true)
     ));
   }

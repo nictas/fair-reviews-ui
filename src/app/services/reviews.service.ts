@@ -22,22 +22,22 @@ export class ReviewsService extends BaseService {
   }
 
   getReviews(page: number, size: number, sort: string, direction: string): Observable<PaginatedResponse<PullRequestReview> | null> {
-    let url = `${this.gatewayUrl}/rest/reviews?page=${page}&size=${size}&sort=${sort},${direction}&sort=id,asc`;
+    let url = `/rest/reviews?page=${page}&size=${size}&sort=${sort},${direction}&sort=id,asc`;
     return this.request(client => client.get<PaginatedResponse<PullRequestReview>>(url));
   }
 
   deleteReview(id: string): Observable<true | null> {
-    return this.request(client => client.delete<void>(`${this.gatewayUrl}/rest/reviews/${id}`).pipe(
+    return this.request(client => client.delete<void>(`/rest/reviews/${id}`).pipe(
       map(unused => true)
     ));
   }
 
   getReview(id: string): Observable<PullRequestReview | null> {
-    return this.request(client => client.get<PullRequestReview>(`${this.gatewayUrl}/rest/reviews/${id}`));
+    return this.request(client => client.get<PullRequestReview>(`/rest/reviews/${id}`));
   }
 
   createReview(request: PullRequestAssignRequest): Observable<PullRequestReview[] | null> {
-    return this.request(client => client.post<PullRequestReview[]>(`${this.gatewayUrl}/rest/reviews/assign`, request));
+    return this.request(client => client.post<PullRequestReview[]>(`/rest/reviews/assign`, request));
   }
 
 }

@@ -1,12 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { catchError, Observable, of, throwError } from 'rxjs';
-import { environment } from '../../environment/environment';
+import { catchError, Observable, of } from 'rxjs';
 import { GlobalMessageService } from './global-message.service';
 
 export abstract class BaseService {
-
-    protected gatewayUrl = environment.gatewayUrl;
 
     constructor(
         private router: Router,
@@ -30,7 +27,7 @@ export abstract class BaseService {
     }
 
     logout(): Observable<void> {
-        return this.client.post<void>(`${this.gatewayUrl}/logout`, {})
+        return this.client.post<void>(`/logout`, {})
     }
 
 }

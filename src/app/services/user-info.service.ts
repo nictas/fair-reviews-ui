@@ -20,7 +20,7 @@ export class UserInfoService extends BaseService {
   }
 
   getUserInfo(): Observable<UserInfo | null> {
-    return this.request(client => client.get<UserInfo>(`${this.gatewayUrl}/rest/user-info`));
+    return this.request(client => client.get<UserInfo>(`/rest/user-info`));
   }
 
   isUserAdmin(): Observable<boolean | null> {
