@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { delay, tap } from 'rxjs';
 import { FileMultiplier, Multiplier } from '../model/Multiplier';
 import { MultipliersService } from '../services/multipliers.service';
@@ -35,6 +35,7 @@ export class MultiplierDetailComponent implements OnInit {
     private userInfoService: UserInfoService,
     private multipliersService: MultipliersService,
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location
   ) { }
 
@@ -42,8 +43,10 @@ export class MultiplierDetailComponent implements OnInit {
     const multiplierId = this.route.snapshot.paramMap.get('id');
     if (multiplierId) {
       this.dataLoading = true;
-      this.userInfoService.isAdmin().subscribe(isAdmin => {
-        this.isAdmin = isAdmin;
+      this.userInfoService.isUserAdmin().subscribe(isAdmin => {
+        if (isAdmin) {
+          this.isAdmin = isAdmin;
+        }
       });
       this.multipliersService.getMultiplier(multiplierId).pipe(
         delay(2000), // Uncomment to test the loading indicator
@@ -52,9 +55,11 @@ export class MultiplierDetailComponent implements OnInit {
           this.dataLoading = false;
         })
       ).subscribe(multiplier => {
-        this.multiplier = multiplier;
-        this.fileMultipliers = multiplier.fileMultipliers;
-        this.updateShown();
+        if (multiplier) {
+          this.multiplier = multiplier;
+          this.fileMultipliers = multiplier.fileMultipliers;
+          this.updateShown();
+        }
       });
     }
   }
@@ -69,7 +74,11 @@ export class MultiplierDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.location.back();
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate(['/multipliers']);
+    }
   }
 
   toggleCollapse() {
@@ -88,10 +97,12 @@ export class MultiplierDetailComponent implements OnInit {
 
   deleteMultiplier(): void {
     if (this.multiplierToDelete) {
-      this.multipliersService.deleteMultiplier(this.multiplierToDelete).subscribe(() => {
+      this.multipliersService.deleteMultiplier(this.multiplierToDelete).subscribe(success => {
         this.showConfirmDialog = false;
         this.multiplierToDelete = null;
-        this.goBack();
+        if (success) {
+          this.goBack();
+        }
       });
     }
   }

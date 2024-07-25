@@ -1,13 +1,13 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { delay, Observable, tap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, tap } from 'rxjs';
 import { Developer } from '../model/Developer';
+import { PaginatedResponse } from '../model/PaginatedResponse';
 import { PullRequestReview } from '../model/PullRequestReview';
 import { DevelopersService } from '../services/developers.service';
-import { PaginatedResponse } from '../model/PaginatedResponse';
-import { UserInfoService } from '../services/user-info.service';
 import { ReviewsService } from '../services/reviews.service';
+import { UserInfoService } from '../services/user-info.service';
 import { mergeUnique } from '../shared/merge';
 
 @Component({
@@ -62,12 +62,15 @@ export class DeveloperDetailComponent implements OnInit {
     private developersService: DevelopersService,
     private reviewsService: ReviewsService,
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location
   ) { }
 
   ngOnInit(): void {
-    this.userInfoService.isAdmin().subscribe(isAdmin => {
-      this.isAdmin = isAdmin;
+    this.userInfoService.isUserAdmin().subscribe(isAdmin => {
+      if (isAdmin) {
+        this.isAdmin = isAdmin;
+      }
       const loginParameter = this.route.snapshot.paramMap.get('login');
       if (loginParameter != null) {
         this.login = loginParameter;
@@ -90,13 +93,15 @@ export class DeveloperDetailComponent implements OnInit {
     }
   }
 
-  private vizualizePage(page: PaginatedResponse<PullRequestReview>): void {
-    this.reviews = mergeUnique(this.reviews, page.content, review => review.id);
-    this.totalPages = page.totalPages;
-    this.currentPage = page.number;
+  private vizualizePage(page: PaginatedResponse<PullRequestReview> | null): void {
+    if (page) {
+      this.reviews = mergeUnique(this.reviews, page.content, review => review.id);
+      this.totalPages = page.totalPages;
+      this.currentPage = page.number;
+    }
   }
 
-  fetchPage(login: string, page: number, pageSize: number): Observable<PaginatedResponse<PullRequestReview>> {
+  fetchPage(login: string, page: number, pageSize: number): Observable<PaginatedResponse<PullRequestReview> | null> {
     this.dataLoading = true;
     return this.developersService.getDeveloperHistory(login, page, pageSize, this.sortField, this.sortDirection).pipe(
       // delay(2000), // Uncomment to test the loading indicator
@@ -118,7 +123,11 @@ export class DeveloperDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.location.back();
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate(['/developers']);
+    }
   }
 
   toggleCollapse() {
@@ -148,25 +157,29 @@ export class DeveloperDetailComponent implements OnInit {
 
   private deleteReview() {
     if (this.entityToDeleteId) {
-      this.reviewsService.deleteReview(this.entityToDeleteId).subscribe(() => {
-        this.developersService.getDeveloper(this.login).subscribe(developer => {
-          this.developer = developer; // Refresh the developer score
-        });
-        this.reviews = this.reviews.filter(review => review.id !== this.entityToDeleteId);
+      this.reviewsService.deleteReview(this.entityToDeleteId).subscribe(success => {
         this.showConfirmDialog = false;
         this.entityToDeleteId = null;
         this.entityToDelete = null;
+        if (success) {
+          this.developersService.getDeveloper(this.login).subscribe(developer => {
+            this.developer = developer; // Refresh the developer score
+          });
+          this.refreshOpenPages();
+        }
       });
     }
   }
 
   deleteDeveloper() {
     if (this.entityToDeleteId) {
-      this.developersService.deleteDeveloper(this.entityToDeleteId).subscribe(() => {
+      this.developersService.deleteDeveloper(this.entityToDeleteId).subscribe(success => {
         this.showConfirmDialog = false;
         this.entityToDeleteId = null;
         this.entityToDelete = null;
-        this.goBack();
+        if (success) {
+          this.goBack();
+        }
       });
     }
   }
@@ -181,8 +194,14 @@ export class DeveloperDetailComponent implements OnInit {
       this.sortField = field;
       this.sortDirection = 'asc';  // Reset to ascending if a new field is clicked
     }
+    this.refreshOpenPages();
+  }
+
+  private refreshOpenPages() {
     this.fetchPage(this.login, 0, (this.currentPage + 1) * this.pageSize).subscribe(page => {
-      this.reviews = page.content;
+      if (page) {
+        this.reviews = page.content;
+      }
     });
   }
 

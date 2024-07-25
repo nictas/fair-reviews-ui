@@ -1,27 +1,32 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { environment } from '../../environment/environment';
 import { UserInfo } from '../model/UserInfo';
+import { BaseService } from './base.service';
+import { GlobalMessageService } from './global-message.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserInfoService {
+export class UserInfoService extends BaseService {
 
-  private gatewayUrl = environment.gatewayUrl;
-
-  constructor(private httpClient: HttpClient) { }
-
-  getUserInfo(): Observable<UserInfo> {
-    return this.httpClient.get<UserInfo>(`${this.gatewayUrl}/rest/user-info`);
+  constructor(
+    router: Router,
+    client: HttpClient,
+    globalMessageService: GlobalMessageService
+  ) {
+    super(router, client, globalMessageService);
   }
 
-  isAdmin(): Observable<boolean> {
-    return this.getUserInfo().pipe(map(userInfo => userInfo.roles.includes("ROLE_ADMIN")));
+  getUserInfo(): Observable<UserInfo | null> {
+    return this.request(client => client.get<UserInfo>(`${this.gatewayUrl}/rest/user-info`));
   }
 
-  logout(): Observable<void> {
-    return this.httpClient.post<void>(`${this.gatewayUrl}/logout`, {});
+  isUserAdmin(): Observable<boolean | null> {
+    return this.getUserInfo().pipe(
+      map(userInfo => userInfo ? userInfo.roles.includes("ROLE_ADMIN") : null)
+    );
   }
+
 }
