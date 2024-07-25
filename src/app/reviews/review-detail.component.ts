@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { delay, tap } from 'rxjs';
 import { ChangedFile, PullRequestReview } from '../model/PullRequestReview';
 import { ReviewsService } from '../services/reviews.service';
@@ -35,6 +35,7 @@ export class ReviewDetailComponent implements OnInit {
     private userInfoService: UserInfoService,
     private reviewsService: ReviewsService,
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location
   ) { }
 
@@ -42,8 +43,10 @@ export class ReviewDetailComponent implements OnInit {
     const reviewId = this.route.snapshot.paramMap.get('id');
     if (reviewId) {
       this.dataLoading = true;
-      this.userInfoService.isAdmin().subscribe(isAdmin => {
-        this.isAdmin = isAdmin;
+      this.userInfoService.isUserAdmin().subscribe(isAdmin => {
+        if (isAdmin) {
+          this.isAdmin = isAdmin;
+        }
       });
       this.reviewsService.getReview(reviewId).pipe(
         delay(2000), // Uncomment to test the loading indicator
@@ -52,9 +55,11 @@ export class ReviewDetailComponent implements OnInit {
           this.dataLoading = false;
         })
       ).subscribe(review => {
-        this.review = review;
-        this.changedFiles = review.pullRequestFileDetails.changedFiles;
-        this.updateShown();
+        if (review) {
+          this.review = review;
+          this.changedFiles = review.pullRequestFileDetails.changedFiles;
+          this.updateShown();
+        }
       });
     }
   }
@@ -68,7 +73,11 @@ export class ReviewDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.location.back();
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate(['/reviews']);
+    }
   }
 
   toggleCollapse() {
@@ -93,10 +102,12 @@ export class ReviewDetailComponent implements OnInit {
 
   deleteReview(): void {
     if (this.reviewToDelete) {
-      this.reviewsService.deleteReview(this.reviewToDelete).subscribe(() => {
+      this.reviewsService.deleteReview(this.reviewToDelete).subscribe(success => {
         this.showConfirmDialog = false;
         this.reviewToDelete = null;
-        this.goBack();
+        if (success) {
+          this.goBack();
+        }
       });
     }
   }

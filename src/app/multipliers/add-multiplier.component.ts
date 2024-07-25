@@ -50,8 +50,10 @@ export class AddMultiplierComponent {
       fileMultipliers: this.form.value.fileMultipliers
     };
 
-    this.multipliersService.createMultiplier(multiplier).subscribe(unused => {
-      this.closeForm();
+    this.multipliersService.createMultiplier(multiplier).subscribe(multiplier => {
+      if (multiplier) {
+        this.closeForm();
+      }
     });
   }
 

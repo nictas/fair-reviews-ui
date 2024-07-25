@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { delay, Observable, tap } from 'rxjs';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { PullRequestReview } from '../model/PullRequestReview';
+import { GlobalMessageService } from '../services/global-message.service';
 import { ReviewsService } from '../services/reviews.service';
 import { UserInfoService } from '../services/user-info.service';
 import { mergeUnique } from '../shared/merge';
-import { MessageBaseComponent } from '../shared/message-base.component';
 
 @Component({
   templateUrl: './reviews.component.html',
   styleUrls: ['./reviews.component.css']
 })
-export class ReviewsComponent extends MessageBaseComponent implements OnInit {
+export class ReviewsComponent implements OnInit {
 
   get pageTitle() {
     return 'Pull Request Reviews';
@@ -56,20 +56,21 @@ export class ReviewsComponent extends MessageBaseComponent implements OnInit {
   addFormVisible = false;
 
   constructor(
-    private reviewsService: ReviewsService,
-    private userInfoService: UserInfoService
-  ) {
-    super();
-  }
+    private globalMessageService: GlobalMessageService,
+    private userInfoService: UserInfoService,
+    private reviewsService: ReviewsService
+  ) { }
 
   ngOnInit(): void {
-    this.userInfoService.isAdmin().subscribe(isAdmin => {
-      this.isAdmin = isAdmin;
+    this.userInfoService.isUserAdmin().subscribe(isAdmin => {
+      if (isAdmin) {
+        this.isAdmin = isAdmin;
+      }
       this.fetchPage(this.currentPage, this.pageSize).subscribe(page => this.vizualizePage(page));
     });
   }
 
-  private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<PullRequestReview>> {
+  private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<PullRequestReview> | null> {
     this.reviewsLoading = true;
     return this.reviewsService.getReviews(page, pageSize, this.sortField, this.sortDirection).pipe(
       delay(2000), // Uncomment to test the loading indicator
@@ -78,10 +79,12 @@ export class ReviewsComponent extends MessageBaseComponent implements OnInit {
     );
   }
 
-  private vizualizePage(page: PaginatedResponse<PullRequestReview>): void {
-    this.reviews = mergeUnique(this.reviews, page.content, review => review.id);
-    this.totalPages = page.totalPages;
-    this.currentPage = page.number;
+  private vizualizePage(page: PaginatedResponse<PullRequestReview> | null): void {
+    if (page) {
+      this.reviews = mergeUnique(this.reviews, page.content, review => review.id);
+      this.totalPages = page.totalPages;
+      this.currentPage = page.number;
+    }
   }
 
   loadMore(): void {
@@ -105,7 +108,9 @@ export class ReviewsComponent extends MessageBaseComponent implements OnInit {
 
   private refreshOpenPages() {
     this.fetchPage(0, (this.currentPage + 1) * this.pageSize).subscribe(page => {
-      this.reviews = page.content;
+      if (page) {
+        this.reviews = page.content;
+      }
     });
   }
 
@@ -128,10 +133,12 @@ export class ReviewsComponent extends MessageBaseComponent implements OnInit {
 
   deleteReview(): void {
     if (this.reviewToDelete) {
-      this.reviewsService.deleteReview(this.reviewToDelete).subscribe(() => {
-        this.reviews = this.reviews.filter(review => review.id !== this.reviewToDelete);
+      this.reviewsService.deleteReview(this.reviewToDelete).subscribe(success => {
         this.showConfirmDialog = false;
         this.reviewToDelete = null;
+        if (success) {
+          this.refreshOpenPages();
+        }
       });
     }
   }
@@ -156,7 +163,7 @@ export class ReviewsComponent extends MessageBaseComponent implements OnInit {
     console.log(`Received reviews ${JSON.stringify(reviews)}`);
     if (reviews && reviews.length > 0) {
       const assignees = reviews.map(review => review.developer.login).join(', ');
-      this.showSuccessMessage(`Pull request has been assigned to ${assignees}, granting them an additional score of ${reviews[0].score}.`, 15000);
+      this.globalMessageService.showSuccessMessage(`Pull request has been assigned to ${assignees}, granting them an additional score of ${reviews[0].score}.`, 20000);
       this.refreshOpenPages();
     }
   }

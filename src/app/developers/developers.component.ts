@@ -3,15 +3,15 @@ import { Observable, tap } from 'rxjs';
 import { Developer } from '../model/Developer';
 import { PaginatedResponse } from '../model/PaginatedResponse';
 import { DevelopersService } from '../services/developers.service';
+import { GlobalMessageService } from '../services/global-message.service';
 import { UserInfoService } from '../services/user-info.service';
 import { mergeUnique } from '../shared/merge';
-import { MessageBaseComponent } from '../shared/message-base.component';
 
 @Component({
   templateUrl: './developers.component.html',
   styleUrls: ['./developers.component.css']
 })
-export class DevelopersComponent extends MessageBaseComponent implements OnInit {
+export class DevelopersComponent implements OnInit {
 
   get pageTitle() {
     return 'Developers';
@@ -55,20 +55,21 @@ export class DevelopersComponent extends MessageBaseComponent implements OnInit 
   developerToDelete: string | null = null;
 
   constructor(
-    private developersService: DevelopersService,
-    private userInfoService: UserInfoService
-  ) {
-    super();
-  }
+    private globalMessageService: GlobalMessageService,
+    private userInfoService: UserInfoService,
+    private developersService: DevelopersService
+  ) { }
 
   ngOnInit(): void {
-    this.userInfoService.isAdmin().subscribe(isAdmin => {
-      this.isAdmin = isAdmin;
+    this.userInfoService.isUserAdmin().subscribe(isAdmin => {
+      if (isAdmin) {
+        this.isAdmin = isAdmin;
+      }
       this.fetchPage(this.currentPage, this.pageSize).subscribe(page => this.vizualizePage(page));
     });
   }
 
-  private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<Developer>> {
+  private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<Developer> | null> {
     this.developersLoading = true;
     return this.developersService.getDevelopers(page, pageSize, this.sortField, this.sortDirection).pipe(
       // delay(2000), // Uncomment to test the loading indicator
@@ -77,10 +78,12 @@ export class DevelopersComponent extends MessageBaseComponent implements OnInit 
     );
   }
 
-  private vizualizePage(page: PaginatedResponse<Developer>): void {
-    this.developers = mergeUnique(this.developers, page.content, developer => developer.login);
-    this.totalPages = page.totalPages;
-    this.currentPage = page.number;
+  private vizualizePage(page: PaginatedResponse<Developer> | null): void {
+    if (page) {
+      this.developers = mergeUnique(this.developers, page.content, developer => developer.login);
+      this.totalPages = page.totalPages;
+      this.currentPage = page.number;
+    }
   }
 
   loadMore(): void {
@@ -99,8 +102,14 @@ export class DevelopersComponent extends MessageBaseComponent implements OnInit 
       this.sortField = field;
       this.sortDirection = 'asc';  // Reset to ascending if a new field is clicked
     }
+    this.refreshOpenPages();
+  }
+
+  private refreshOpenPages() {
     this.fetchPage(0, (this.currentPage + 1) * this.pageSize).subscribe(page => {
-      this.developers = page.content;
+      if (page) {
+        this.developers = page.content;
+      }
     });
   }
 
@@ -123,8 +132,10 @@ export class DevelopersComponent extends MessageBaseComponent implements OnInit 
 
   deleteDeveloper(): void {
     if (this.developerToDelete) {
-      this.developersService.deleteDeveloper(this.developerToDelete).subscribe(() => {
-        this.developers = this.developers.filter(developer => developer.login !== this.developerToDelete);
+      this.developersService.deleteDeveloper(this.developerToDelete).subscribe(success => {
+        if (success) {
+          this.refreshOpenPages();
+        }
         this.showConfirmDialog = false;
         this.developerToDelete = null;
       });
@@ -141,8 +152,10 @@ export class DevelopersComponent extends MessageBaseComponent implements OnInit 
   }
 
   syncDevelopers() {
-    this.developersService.syncDevelopers().subscribe(() => {
-      this.showSuccessMessage("Developer synchronization scheduled. Please refresh the page in a few moments to see the results.");
+    this.developersService.syncDevelopers().subscribe(success => {
+      if (success) {
+        this.globalMessageService.showSuccessMessage("Developer synchronization scheduled. Please refresh the page in a few moments to see the results.");
+      }
     });
   }
 

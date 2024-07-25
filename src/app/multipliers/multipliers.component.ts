@@ -3,16 +3,16 @@ import { FormGroup } from '@angular/forms';
 import { Observable, tap } from 'rxjs';
 import { Multiplier } from '../model/Multiplier';
 import { PaginatedResponse } from '../model/PaginatedResponse';
+import { GlobalMessageService } from '../services/global-message.service';
 import { MultipliersService } from '../services/multipliers.service';
 import { UserInfoService } from '../services/user-info.service';
 import { mergeUnique } from '../shared/merge';
-import { MessageBaseComponent } from '../shared/message-base.component';
 
 @Component({
   templateUrl: './multipliers.component.html',
   styleUrls: ['./multipliers.component.css']
 })
-export class MultipliersComponent extends MessageBaseComponent implements OnInit {
+export class MultipliersComponent implements OnInit {
 
   get pageTitle() {
     return 'Multipliers';
@@ -58,20 +58,21 @@ export class MultipliersComponent extends MessageBaseComponent implements OnInit
   addMultiplierForm!: FormGroup;
 
   constructor(
+    private globalMessageService: GlobalMessageService,
+    private userInfoService: UserInfoService,
     private multipliersService: MultipliersService,
-    private userInfoService: UserInfoService
-  ) {
-    super();
-  }
+  ) { }
 
   ngOnInit(): void {
-    this.userInfoService.isAdmin().subscribe(isAdmin => {
-      this.isAdmin = isAdmin;
+    this.userInfoService.isUserAdmin().subscribe(isAdmin => {
+      if (isAdmin) {
+        this.isAdmin = isAdmin;
+      }
       this.fetchPage(this.currentPage, this.pageSize).subscribe(page => this.vizualizePage(page));
     });
   }
 
-  private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<Multiplier>> {
+  private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<Multiplier> | null> {
     this.multipliersLoading = true;
     return this.multipliersService.getMultipliers(page, pageSize, this.sortField, this.sortDirection).pipe(
       // delay(2000), // Uncomment to test the loading indicator
@@ -80,10 +81,12 @@ export class MultipliersComponent extends MessageBaseComponent implements OnInit
     );
   }
 
-  private vizualizePage(page: PaginatedResponse<Multiplier>): void {
-    this.multipliers = mergeUnique(this.multipliers, page.content, multiplier => multiplier.id);
-    this.totalPages = page.totalPages;
-    this.currentPage = page.number;
+  private vizualizePage(page: PaginatedResponse<Multiplier> | null): void {
+    if (page) {
+      this.multipliers = mergeUnique(this.multipliers, page.content, multiplier => multiplier.id);
+      this.totalPages = page.totalPages;
+      this.currentPage = page.number;
+    }
   }
 
   loadMore(): void {
@@ -107,7 +110,9 @@ export class MultipliersComponent extends MessageBaseComponent implements OnInit
 
   private refreshOpenPages() {
     this.fetchPage(0, (this.currentPage + 1) * this.pageSize).subscribe(page => {
-      this.multipliers = page.content;
+      if (page) {
+        this.multipliers = page.content;
+      }
     });
   }
 
@@ -130,10 +135,12 @@ export class MultipliersComponent extends MessageBaseComponent implements OnInit
 
   deleteMultiplier(): void {
     if (this.multiplierToDelete) {
-      this.multipliersService.deleteMultiplier(this.multiplierToDelete).subscribe(() => {
-        this.multipliers = this.multipliers.filter(multiplier => multiplier.id !== this.multiplierToDelete);
+      this.multipliersService.deleteMultiplier(this.multiplierToDelete).subscribe(success => {
         this.showConfirmDialog = false;
         this.multiplierToDelete = null;
+        if (success) {
+          this.refreshOpenPages();
+        }
       });
     }
   }
@@ -157,7 +164,7 @@ export class MultipliersComponent extends MessageBaseComponent implements OnInit
 
   applyLatestMultiplier() {
     this.multipliersService.applyLatestMultiplier().subscribe(() => {
-      this.showSuccessMessage("Application of latest multiplier scheduled.");
+      this.globalMessageService.showSuccessMessage("Application of latest multiplier scheduled.");
     });
   }
 

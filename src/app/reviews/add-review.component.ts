@@ -60,11 +60,16 @@ export class AddReviewComponent implements OnInit, OnDestroy {
         this.developersService.getDevelopers(page, this.pageSize, 'login', 'asc').pipe(
           tap(page => {
             console.log(`Fetched developers page: ${JSON.stringify(page)}`);
-            this.developers = mergeUnique(this.developers, page.content, developer => developer.login);
+            if (page) {
+              this.developers = mergeUnique(this.developers, page.content, developer => developer.login);
+            }
           }),
           concatMap(page => {
-            const nextPage = page.number + 1;
-            return nextPage < page.totalPages ? of(nextPage) : EMPTY;
+            if (page) {
+              const nextPage = page.number + 1;
+              return nextPage < page.totalPages ? of(nextPage) : EMPTY;
+            }
+            return EMPTY;
           })
         )
       ),
@@ -119,7 +124,9 @@ export class AddReviewComponent implements OnInit, OnDestroy {
 
     this.reviewsService.createReview(request).subscribe(reviews => {
       console.log(`Created reviews: ${JSON.stringify(reviews)}`);
-      this.closeForm(reviews);
+      if (reviews) {
+        this.closeForm(reviews);
+      }
     });
   }
 
