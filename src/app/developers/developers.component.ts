@@ -18,7 +18,7 @@ export class DevelopersComponent implements OnInit {
   }
 
   get pageSize() {
-    return 5;
+    return 20;
   }
 
   private _developersFilter = '';

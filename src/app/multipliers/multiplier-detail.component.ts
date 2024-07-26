@@ -49,7 +49,7 @@ export class MultiplierDetailComponent implements OnInit {
         }
       });
       this.multipliersService.getMultiplier(multiplierId).pipe(
-        delay(2000), // Uncomment to test the loading indicator
+        // delay(2000), // Uncomment to test the loading indicator
         tap(data => console.log(`Fetched data: ${JSON.stringify(data)}`)),
         tap(data => {
           this.dataLoading = false;
