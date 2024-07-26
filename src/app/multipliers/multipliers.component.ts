@@ -19,7 +19,7 @@ export class MultipliersComponent implements OnInit {
   }
 
   get pageSize() {
-    return 1;
+    return 20;
   }
 
   private _multipliersFilter = '';

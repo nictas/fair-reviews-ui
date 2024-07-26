@@ -18,7 +18,7 @@ export class ReviewsComponent implements OnInit {
   }
 
   get pageSize() {
-    return 5;
+    return 20;
   }
 
   private _reviewsFilter = '';
@@ -73,7 +73,7 @@ export class ReviewsComponent implements OnInit {
   private fetchPage(page: number, pageSize: number): Observable<PaginatedResponse<PullRequestReview> | null> {
     this.reviewsLoading = true;
     return this.reviewsService.getReviews(page, pageSize, this.sortField, this.sortDirection).pipe(
-      delay(2000), // Uncomment to test the loading indicator
+      // delay(2000), // Uncomment to test the loading indicator
       tap(page => console.log(`Fetched reviews page: ${JSON.stringify(page)}`)),
       tap(page => this.reviewsLoading = false)
     );

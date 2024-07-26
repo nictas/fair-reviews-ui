@@ -24,7 +24,7 @@ export class AddReviewComponent implements OnInit, OnDestroy {
   developersSubscription: Subscription | null = null;
 
   get pageSize() {
-    return 5;
+    return 20;
   }
 
   private currentPage = 0;

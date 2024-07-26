@@ -48,7 +48,7 @@ export class DeveloperDetailComponent implements OnInit {
   }
 
   get pageSize() {
-    return 5;
+    return 20;
   }
 
   currentPage = 0;
