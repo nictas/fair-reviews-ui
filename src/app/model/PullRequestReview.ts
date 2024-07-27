@@ -8,6 +8,8 @@ export interface ChangedFile {
 }
 
 export interface PullRequestFileDetails {
+    additions: number;
+    deletions: number;
     changedFiles: ChangedFile[];
 }
 

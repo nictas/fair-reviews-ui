@@ -84,10 +84,13 @@ export class ReviewDetailComponent implements OnInit {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  getRatioWidth(value: number, otherValue: number): number {
-    const total = value + otherValue;
-    if (total === 0) return 0;
-    return (value / total) * 100;
+  getRatioWidth(value: number | undefined, otherValue: number | undefined): number {
+    if (value && otherValue) {
+      const total = value + otherValue;
+      if (total === 0) return 0;
+      return (value / total) * 100;
+    }
+    return 0;
   }
 
   confirmDelete(id: string | null): void {
