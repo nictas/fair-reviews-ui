@@ -15,8 +15,8 @@ import { AddReviewComponent } from './reviews/add-review.component';
 import { ReviewDetailComponent } from './reviews/review-detail.component';
 import { ReviewsComponent } from './reviews/reviews.component';
 import { MessageComponent } from './shared/message.component';
-// import { CsrfInterceptor } from './services/csrf-interceptor';
-// import { DebugInterceptor } from './services/debug-interceptor';
+import { StatisticsComponent } from './statistics/statistics.component';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -30,9 +30,11 @@ import { MessageComponent } from './shared/message.component';
     DeveloperDetailComponent,
     AddMultiplierComponent,
     AddReviewComponent,
-    MessageComponent
+    MessageComponent,
+    StatisticsComponent
   ],
   imports: [
+    BaseChartDirective,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
@@ -44,6 +46,7 @@ import { MessageComponent } from './shared/message.component';
       { path: 'reviews/:id', component: ReviewDetailComponent },
       { path: 'multipliers', component: MultipliersComponent },
       { path: 'multipliers/:id', component: MultiplierDetailComponent },
+      { path: 'statistics', component: StatisticsComponent },
       { path: '', redirectTo: 'developers', pathMatch: 'full' },
       { path: '**', redirectTo: 'developers', pathMatch: 'full' }
     ]),
@@ -51,7 +54,8 @@ import { MessageComponent } from './shared/message.component';
   providers: [
     provideHttpClient(
       withXsrfConfiguration({ cookieName: 'XSRF-TOKEN', headerName: 'X-XSRF-TOKEN' })
-    )
+    ),
+    provideCharts(withDefaultRegisterables())
   ],
   bootstrap: [AppComponent]
 })
