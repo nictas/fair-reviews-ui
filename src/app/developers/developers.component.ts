@@ -146,8 +146,8 @@ export class DevelopersComponent implements OnInit {
     let filter = this.developersFilter.toLowerCase();
     this.shownDevelopers = this.developers.filter(developer => {
       let login = developer.login.toLowerCase();
-      let email = developer.email.toLowerCase();
-      return login.includes(filter) || email.includes(filter);
+      let email = developer.email?.toLowerCase();
+      return login.includes(filter) || email?.includes(filter);
     });
   }
 

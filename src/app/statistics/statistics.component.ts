@@ -6,7 +6,6 @@ import { ReviewsService } from '../services/reviews.service';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
-  selector: 'app-statistics',
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.css']
 })
@@ -22,7 +21,7 @@ export class StatisticsComponent implements OnInit {
   public dailyAdditionsDeletions: ChartDataset[] = [];
   public dailyScores: ChartDataset[] = [];
   public topDevelopersScores: ChartDataset[] = [];
-  public topDevelopersLabels: string[] = []; // Declare the missing property
+  public topDevelopersLabels: string[] = [];
 
   constructor(private reviewsService: ReviewsService) {}
 
@@ -76,20 +75,20 @@ export class StatisticsComponent implements OnInit {
   updateChartData(dailyData: any[], totals: any, developerScores: { [key: string]: number }): void {
     // Total additions and deletions for the last 14 days
     this.totalAdditionsDeletions = [
-      { data: [totals.additions], label: 'Additions', backgroundColor: 'green' },
-      { data: [totals.deletions], label: 'Deletions', backgroundColor: 'red' }
+      { data: [totals.additions], label: 'Additions', backgroundColor: '#66c2a5' },
+      { data: [totals.deletions], label: 'Deletions', backgroundColor: '#fc8d62' }
     ];
 
     // Daily additions and deletions for the last 14 days
     this.dailyAdditionsDeletions = [
-      { data: dailyData.map(d => d.additions), label: 'Additions', backgroundColor: 'green' },
-      { data: dailyData.map(d => d.deletions), label: 'Deletions', backgroundColor: 'red' }
+      { data: dailyData.map(d => d.additions), label: 'Additions', backgroundColor: '#8da0cb' },
+      { data: dailyData.map(d => d.deletions), label: 'Deletions', backgroundColor: '#e78ac3' }
     ];
     this.barChartLabels = dailyData.map(d => d.date.format('YYYY-MM-DD'));
 
     // Daily scores for the last 14 days
     this.dailyScores = [
-      { data: dailyData.map(d => d.scores), label: 'Scores', backgroundColor: 'blue' }
+      { data: dailyData.map(d => d.scores), label: 'Score', backgroundColor: '#a6d854' }
     ];
 
     // Top 5 developers by score in the last 14 days
@@ -99,8 +98,8 @@ export class StatisticsComponent implements OnInit {
     this.topDevelopersScores = [
       {
         data: topDevelopers.map(([, score]) => score),
-        label: 'Scores',
-        backgroundColor: 'orange'
+        label: 'Score',
+        backgroundColor: ['#ffcc00', '#ff9900', '#ff6600', '#ff3300', '#cc0000']
       }
     ];
     this.topDevelopersLabels = topDevelopers.map(([login]) => login); // Update this property correctly
