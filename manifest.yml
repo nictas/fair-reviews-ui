@@ -1,0 +1,9 @@
+applications:
+- name: fair-reviews-ui
+  memory: 64M
+  disk_quota: 256M
+  buildpacks:
+    - staticfile_buildpack
+  path: dist/fair-reviews-ui/browser
+  routes:
+    - route: fair-reviews-ui.((domain))
