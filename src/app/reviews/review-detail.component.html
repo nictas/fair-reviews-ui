@@ -28,6 +28,21 @@
             <dt class="col-sm-4">Multiplier:</dt>
             <dd class="col-sm-8"><a
                     [routerLink]="['/multipliers', review?.multiplier?.id]">{{review?.multiplier?.id}}</a></dd>
+            <dt class="col-sm-4">Total Additions:</dt>
+            <dd class="col-sm-8 text-success">+{{review?.pullRequestFileDetails?.additions | number:'1.0-0'}}</dd>
+            <dt class="col-sm-4">Total Deletions:</dt>
+            <dd class="col-sm-8 text-danger">-{{review?.pullRequestFileDetails?.deletions | number:'1.0-0'}}</dd>
+            <dt class="col-sm-4">Additions/Deletions Ratio:</dt>
+            <dd class="col-sm-8">
+                <div class="ratio-bar">
+                    <div class="ratio-bar-additions"
+                        [ngStyle]="{'width': getRatioWidth(review?.pullRequestFileDetails?.additions, review?.pullRequestFileDetails?.deletions) + '%'}">
+                    </div>
+                    <div class="ratio-bar-deletions"
+                        [ngStyle]="{'width': getRatioWidth(review?.pullRequestFileDetails?.deletions, review?.pullRequestFileDetails?.additions) + '%'}">
+                    </div>
+                </div>
+            </dd>
         </dl>
         <div *ngIf="isAdmin" class="d-flex justify-content-end">
             <button *ngIf="review" class="btn btn-danger btn-sm" (click)="confirmDelete(review.id)" aria-label="Delete">
