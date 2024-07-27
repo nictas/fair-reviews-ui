@@ -1,0 +1,75 @@
+<div class="container mt-5">
+    <div class="row">
+        <!-- Total Additions and Deletions in the Last 14 Days -->
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center p-3">
+                    <h5 class="my-0">Total Additions and Deletions (2 weeks)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas baseChart 
+                        [datasets]="totalAdditionsDeletions" 
+                        [labels]="['Total']" 
+                        [options]="barChartOptions"
+                        [legend]="barChartLegend" 
+                        [type]="barChartType">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Additions and Deletions in the Last 14 Days -->
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center p-3">
+                    <h5 class="my-0">Daily Additions and Deletions (2 weeks)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas baseChart 
+                        [datasets]="dailyAdditionsDeletions" 
+                        [labels]="barChartLabels" 
+                        [options]="barChartOptions"
+                        [legend]="barChartLegend" 
+                        [type]="barChartType">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Scores in the Last 14 Days -->
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center p-3">
+                    <h5 class="my-0">Daily Scores (2 weeks)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas baseChart 
+                        [datasets]="dailyScores" 
+                        [labels]="barChartLabels" 
+                        [options]="barChartOptions"
+                        [legend]="barChartLegend" 
+                        [type]="barChartType">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top 5 Developers by Score in the Last 14 Days -->
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center p-3">
+                    <h5 class="my-0">Top 5 Developers by Score (2 weeks)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas baseChart 
+                        [datasets]="topDevelopersScores" 
+                        [labels]="topDevelopersLabels" 
+                        [options]="barChartOptions"
+                        [legend]="barChartLegend" 
+                        [type]="barChartType">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
