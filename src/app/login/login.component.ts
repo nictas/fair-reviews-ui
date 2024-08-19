@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'fr-login',
@@ -8,10 +7,8 @@ import { environment } from '../../environment/environment';
 })
 export class LoginComponent {
 
-  private gatewayUrl = environment.gatewayUrl;
-
   loginWithGitHub(): void {
-    window.location.href = `${this.gatewayUrl}/oauth2/authorization/github`;
+    window.location.href = '/oauth2/authorization/github';
   }
 
 }
