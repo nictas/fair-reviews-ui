@@ -1,0 +1,3 @@
+# Must be copied in the dist/fair-reviews-ui/browser directory before pushing the UI in Cloud Foundry. Fixes the 404 Not Found responses when refreshing.
+pushstate: enabled
+force_https: true
